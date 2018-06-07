@@ -24,6 +24,7 @@ import { MiHttpService } from './servicios/mi-http.service';
 import { UsuarioService } from './servicios/usuario.service';
 import { HttpModule } from '@angular/http';
 import { ArchivoUsuarioService } from './servicios/archivo-usuario.service';
+import { ErrorComponent } from './componentes/error/error.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ArchivoUsuarioService } from './servicios/archivo-usuario.service';
     FooterComponent,
     ListadoComponent,
     MenuComponent,
-    CarrouselComponent
+    CarrouselComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,

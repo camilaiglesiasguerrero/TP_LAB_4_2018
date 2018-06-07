@@ -3,6 +3,7 @@ import { Persona } from '../../clases/persona';
 import { UsuarioService } from '../../servicios/usuario.service';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ export class LoginComponent implements OnInit {
   staticAlertClosed = false;
   dangerMessage: string;
 
-  constructor(private usuarioS : UsuarioService) { 
+  constructor(private usuarioS : UsuarioService, private route: ActivatedRoute,
+    private router: Router) { 
     this.usuario = new Persona();
   }
 
@@ -47,5 +49,15 @@ Entrar(){
     });
   }
 } 
+
+logOut()
+  {
+    try {
+      localStorage.clear();
+      this.router.navigate(['/login']);
+    } catch (error) {
+      return false;
+    }
+  }
 
 }
