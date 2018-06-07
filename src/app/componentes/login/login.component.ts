@@ -41,10 +41,11 @@ Entrar(){
       var respuesta =  this.usuarioS.GenerarToken(this.usuario.usuario,this.usuario.clave, token => { 
       if(token!=undefined)
         {
-         // console.info (token, tipo); 
+          console.info (token); 
           sessionStorage.clear();
           sessionStorage.setItem("token",token);
           localStorage.setItem("usuario",this.usuario.usuario);
+          this.router.navigate(['/Principal']);
         }
     });
   }

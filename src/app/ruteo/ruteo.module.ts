@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 
 //can Activate
 import { EncargadoAuthModule } from '../autenticacion/encargado-auth/encargado-auth.module';
-
+import { VerificarJwtService } from '../servicios/auth/verificar-jwt.service';
 //ruteo
 import { RouterModule, Routes } from '@angular/router';
 
@@ -17,9 +17,9 @@ import { ErrorComponent } from '../componentes/error/error.component';
 
 const MiRuteo = [
   {path: '' , component: PrincipalComponent},
-  {path:'Principal', component: PrincipalComponent},
+  {path:'Principal', component: PrincipalComponent, canActivate: [VerificarJwtService] },
   {path:'Ingresar', component: LoginComponent},
-  {path: 'Encuesta', component: EncuestaComponent, canActivate: [EncargadoAuthModule] },
+  {path: 'Encuesta', component: EncuestaComponent, canActivate: [VerificarJwtService] },
   {path:'**', component: ErrorComponent}
   
 ];

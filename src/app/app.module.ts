@@ -18,13 +18,15 @@ import { FooterComponent } from './Componentes/footer/footer.component';
 import { ListadoComponent } from './Componentes/listado/listado.component';
 import { MenuComponent } from './Componentes/menu/menu.component';
 import { CarrouselComponent } from './Componentes/carrousel/carrousel.component';
+import { ErrorComponent } from './componentes/error/error.component';
 
 //SERVICIOS
 import { MiHttpService } from './servicios/mi-http.service';
 import { UsuarioService } from './servicios/usuario.service';
 import { HttpModule } from '@angular/http';
 import { ArchivoUsuarioService } from './servicios/archivo-usuario.service';
-import { ErrorComponent } from './componentes/error/error.component';
+import { AuthService } from './servicios/auth/auth.service';
+import { VerificarJwtService } from './servicios/auth/verificar-jwt.service';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,7 @@ import { ErrorComponent } from './componentes/error/error.component';
     RuteoModule,
     GalleriaModule
   ],
-  providers: [MiHttpService, UsuarioService, ArchivoUsuarioService],
+  providers: [MiHttpService, UsuarioService, ArchivoUsuarioService, AuthService, VerificarJwtService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
