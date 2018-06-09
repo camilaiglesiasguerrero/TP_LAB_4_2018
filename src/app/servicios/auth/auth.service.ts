@@ -17,8 +17,8 @@ export class AuthService {
   public isLogued()
   {
     try {
-      // console.log( 'is logued', tokenNotExpired());
-      let rta = tokenNotExpired() || false;
+      //console.log(localStorage.getItem('token') +  'is logued', tokenNotExpired(this._token));
+      let rta = tokenNotExpired();
       return rta;
     } catch (error) {
       return false;

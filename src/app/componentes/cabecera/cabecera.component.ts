@@ -44,9 +44,13 @@ export class CabeceraComponent implements OnInit {
         if(localStorage.getItem('usuario') != 'invitado')
           this.router.navigate(['/Reserva']);
         else
-          this.router.navigate(['/Ingresar']);
+          { console.log(localStorage.getItem('usuario'));
+            this.router.navigate(['/Ingresar']);
+          }
         break;
-      
+      case 'Encuesta':
+        this.router.navigate(['Encuesta']);
+        break;
   }
 }
     

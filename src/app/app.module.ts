@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { GalleriaModule } from 'primeng/galleria';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+//Captcha
+import { RecaptchaModule } from 'ng-recaptcha';
 
 //Ruteo
 import { RouterModule, Routes } from '@angular/router';
@@ -16,10 +18,11 @@ import { LoginComponent } from './componentes/login/login.component';
 import { RegistroComponent } from './Componentes/registro/registro.component';
 import { EncuestaComponent } from './Componentes/encuesta/encuesta.component';
 import { FooterComponent } from './Componentes/footer/footer.component';
-import { ListadoComponent } from './Componentes/listado/listado.component';
+import { ListadoComponent } from './componentes/listado/listado.component';
 import { MenuComponent } from './Componentes/menu/menu.component';
 import { CarrouselComponent } from './componentes/carrousel/carrousel.component';
 import { ErrorComponent } from './componentes/error/error.component';
+import { ReservaComponent } from './componentes/reserva/reserva.component';
 
 //SERVICIOS
 import { MiHttpService } from './servicios/mi-http.service';
@@ -34,6 +37,8 @@ import { ClienteAuthService } from './servicios/auth/cliente-auth.service';
 //PIPE
 import { FormatoHoraPipe } from './pipes/formato-hora.pipe';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,11 +52,13 @@ import { FormatoHoraPipe } from './pipes/formato-hora.pipe';
     MenuComponent,
     CarrouselComponent,
     ErrorComponent,
+    ReservaComponent,
     FormatoHoraPipe
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    RecaptchaModule.forRoot(),
     ReactiveFormsModule,
     NgbModule.forRoot(), 
     HttpModule,

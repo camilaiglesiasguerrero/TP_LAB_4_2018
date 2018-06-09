@@ -6,9 +6,12 @@
     <br><br>
      <input type="text" placeholder="Usuario" [(ngModel)] = 'usuario.usuario'  name="name" style="width:20%" required>
      <br><br><input type="password" placeholder="Clave" [(ngModel)] = 'usuario.clave'  name="psw" style="width:20%" required>
+    <br>  <div style="margin-left: 35%; margin-top: 2%">
+     <re-captcha  (resolved)="resolved($event)" siteKey="6LfEKF4UAAAAAFY9SD3LQATL7j4Hak-pANt5_STg"></re-captcha>
+    </div>
      <br><br><button type="button" class="btn btn-success"  (click)="Entrar()" >Ingresar</button>
-     
-     <script src='https://www.google.com/recaptcha/api.js?hl=es'></script>
-     <script src='https://www.google.com/recaptcha/api.js'></script>
   </form>
+  
+     <script src='https://www.google.com/recaptcha/api.js'></script>
+     
 </div>

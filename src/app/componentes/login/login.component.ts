@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   private _danger = new Subject<string>();
   staticAlertClosed = false;
   dangerMessage: string;
+  captcha : string = null;
 
   constructor(private usuarioS : UsuarioService, private route: ActivatedRoute,
     private router: Router) { 
@@ -31,9 +32,12 @@ export class LoginComponent implements OnInit {
   }
  
 Entrar(){
-  if(this.usuario.usuario==null || this.usuario.clave==null)
+  if(this.usuario.usuario==null || this.usuario.clave==null || this.captcha == null )
     {
-      this._danger.next(`Por favor completar usuario y clave.`);
+      if(this.captcha == null)
+        this._danger.next('No olvides resolver el captcha');
+      else
+        this._danger.next(`Por favor completar usuario y clave.`);
     }
     else
     {
@@ -43,14 +47,17 @@ Entrar(){
           //console.info (token); 
           sessionStorage.clear();
           sessionStorage.setItem("token",token);
-          localStorage.clear();
+          localStorage.setItem("token",token);
           localStorage.setItem("usuario",this.usuario.usuario);
           this.router.navigate(['/Principal']);
-
         }
     });
   }
 } 
 
+resolved(captchaResponse: string) {
+  this.captcha = captchaResponse;
+  //console.log(`Resolved captcha with response ${captchaResponse}:`);
+}
 
 }
