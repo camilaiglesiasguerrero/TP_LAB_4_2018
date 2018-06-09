@@ -1,3 +1,21 @@
-<p>
-  registro works!
-</p>
+<body>
+  <div class="container" style="margin-left: 7%" >
+  <form [formGroup]="registroForm" class="modal-content animate" (ngSubmit)="Registrar()" >
+    <div class="container" >
+      <div class="form-group">
+        <label><b>Email</b></label> <br>
+        <input class="elMargen" type="email" placeholder="example@example.com" name="email" [formControl]="email" required>
+        <label><b>Clave</b></label><br>
+        <input class="elMargen" type="password" placeholder="*****" name="psw"  [formControl]="clave  " required>
+        <label><b>Repita la clave</b></label><br>
+        <input class="elMargen" type="password" placeholder="*****"  [formControl]="copiaClave" name="psw-repeat" required>
+        <div nbRecaptcha key="public key" formControlName="captcha"></div>
+      </div>
+      
+      <div>
+        <button type="submit" class="btn btn-success" [disabled]="!registroForm.valid">Registrarme</button>
+      </div><br>
+    </div>
+  </form>
+  </div>
+</body>

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { Persona } from '../../clases/persona';
 import { UsuarioService } from '../../servicios/usuario.service';
-import {Subject} from 'rxjs';
+import { Subject } from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -29,8 +29,7 @@ export class LoginComponent implements OnInit {
       debounceTime(5000)
     ).subscribe(() => this.dangerMessage = null);
   }
-
-
+ 
 Entrar(){
   if(this.usuario.usuario==null || this.usuario.clave==null)
     {
@@ -41,24 +40,17 @@ Entrar(){
       var respuesta =  this.usuarioS.GenerarToken(this.usuario.usuario,this.usuario.clave, token => { 
       if(token!=undefined)
         {
-          console.info (token); 
+          //console.info (token); 
           sessionStorage.clear();
           sessionStorage.setItem("token",token);
+          localStorage.clear();
           localStorage.setItem("usuario",this.usuario.usuario);
           this.router.navigate(['/Principal']);
+
         }
     });
   }
 } 
 
-logOut()
-  {
-    try {
-      localStorage.clear();
-      this.router.navigate(['/login']);
-    } catch (error) {
-      return false;
-    }
-  }
 
 }

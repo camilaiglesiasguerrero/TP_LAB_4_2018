@@ -1,0 +1,12 @@
+.navbar .divider-vertical {
+    height: 40px;
+    margin: 0 9px;
+    border-left: 0.5px solid rgb(81, 148, 103);
+    border-right:0.5px solid rgb(81, 148, 103);
+    }
+
+.a{
+    font-size: 18px;
+    font-family: 'Delius';
+    font-weight: bold;
+}

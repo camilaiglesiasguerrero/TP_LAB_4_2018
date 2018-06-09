@@ -9,49 +9,59 @@
       <span style="font-size:25px" class="fa fa-phone"></span><a class="a"> Teléfono: 5091-6600 </a>
     </div>
   </div>
-</nav>
-
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color:rgb(71, 131, 91)">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" class="a">Bienvenido {{user}}</a>
-      </li>
-      <li class="divider-vertical"></li>
-      <li class="nav-item active">
-        <a class="nav-link" (click)="irA(1)" class='a'><span class="fa fa-home"></span> Inicio</a>
-      </li>
-      <li class="divider-vertical"></li>
-
-      <li class="nav-item">
-        <a class="nav-link" (click)="irA(2)" class='a'><span class="fa fa-car"></span> Nuestra flota</a>
-      </li>
-      <li class="divider-vertical"></li>
-
-      <li class="nav-item active">
-        <a class="nav-link" (click)="irA(3)" class='a'><span class="fa fa-users"></span> Acerca de...</a>
-      </li>
-      <li class="divider-vertical"></li>
-
-      <li class="nav-item active">
-        <a class="nav-link" (click)="irA(4)" class='a'><span class="fa fa-check"></span> Reservar</a>
-      </li>
-      <li class="divider-vertical"></li>
-
-      <li class="nav-item active" [hidden]=flag>
-        <a class="nav-link" (click)="irA(5)"  class='a'><span class="fa fa-sign-out"></span> Salir</a>
-      </li>
-      <li class="divider-vertical" [hidden]=flag></li>
-</ul>
-
-<form class="form-inline my-2  my-lg-0">
-  <!--<a   >¿Quien Soy? <i class="fa fa-user"></i></a> -->
-  <a class="nav-link" (click)="irA(5)" class='a' style="font-size:14px; text-align:right;"><span class="fa fa-arrow-right"></span> Acceso empleados</a>
-</form>
-    
+  <div>
+  <form class="form-inline my-6  my-lg-2">
+      <a class="nav-link" (click)="irA('Logueo')" class='a' style="font-size:13px; text-align:right;"><span class="fa fa-arrow-right"></span> Acceso empleados</a>
+    </form>    
   </div>
 </nav>
+
+
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color:rgb(71, 131, 91)">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <!--<li class="nav-item active">
+          <a class="nav-link" class="a">Bienvenido, {{user | formatoHora }}</a>
+        </li>
+        <li class="divider-vertical"></li>-->
+        <li class="nav-item active">
+          <a class="nav-link" (click)="irA('Principal')" class='a'><span class="fa fa-home"></span> Inicio</a>
+        </li>
+        <li class="divider-vertical"></li>
+  
+        <!--<li class="nav-item">
+          <a class="nav-link" (click)="irA(2)" class='a'><span class="fa fa-car"></span> Nuestra flota</a>
+        </li>
+        <li class="divider-vertical"></li>
+  
+        <li class="nav-item active">
+          <a class="nav-link" (click)="irA(3)" class='a'><span class="fa fa-users"></span> Acerca de...</a>
+        </li>
+        <li class="divider-vertical"></li>-->
+  
+        <li class="nav-item active">
+          <a class="nav-link" (click)="irA('Reservar')" class='a'><span class="fa fa-check"></span> Reservar</a>
+        </li>
+        <li class="divider-vertical"></li>
+        
+        <li class="nav-item active">
+          <a class="nav-link" (click)="irA('Encuesta')" class='a'><span class="fa fa-check"></span> Encuesta</a>
+        </li>
+        <li class="divider-vertical"></li>
+  
+        <li class="nav-item active" >
+          <a class="nav-link" (click)="irA('Deslogueo')" [hidden]=!logueado class='a'><span class="fa fa-sign-out"></span> Salir</a>
+        </li>
+        <li [hidden]=!logueado class="divider-vertical"></li>
+  </ul>
+  
+      
+    </div>
+  </nav>
+
+
+  

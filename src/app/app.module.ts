@@ -1,8 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { GalleriaModule } from 'primeng/galleria';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 //Ruteo
 import { RouterModule, Routes } from '@angular/router';
 import { RuteoModule } from './ruteo/ruteo.module';
@@ -17,7 +18,7 @@ import { EncuestaComponent } from './Componentes/encuesta/encuesta.component';
 import { FooterComponent } from './Componentes/footer/footer.component';
 import { ListadoComponent } from './Componentes/listado/listado.component';
 import { MenuComponent } from './Componentes/menu/menu.component';
-import { CarrouselComponent } from './Componentes/carrousel/carrousel.component';
+import { CarrouselComponent } from './componentes/carrousel/carrousel.component';
 import { ErrorComponent } from './componentes/error/error.component';
 
 //SERVICIOS
@@ -26,7 +27,12 @@ import { UsuarioService } from './servicios/usuario.service';
 import { HttpModule } from '@angular/http';
 import { ArchivoUsuarioService } from './servicios/archivo-usuario.service';
 import { AuthService } from './servicios/auth/auth.service';
-import { VerificarJwtService } from './servicios/auth/verificar-jwt.service';
+import { AdministradorAuthService } from './servicios/auth/administrador-auth.service';
+import { EncargadoAuthService } from './servicios/auth/encargado-auth.service';
+import { EmpleadoAuthService } from './servicios/auth/empleado-auth.service';
+import { ClienteAuthService } from './servicios/auth/cliente-auth.service';
+//PIPE
+import { FormatoHoraPipe } from './pipes/formato-hora.pipe';
 
 @NgModule({
   declarations: [
@@ -40,17 +46,20 @@ import { VerificarJwtService } from './servicios/auth/verificar-jwt.service';
     ListadoComponent,
     MenuComponent,
     CarrouselComponent,
-    ErrorComponent
+    ErrorComponent,
+    FormatoHoraPipe
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     NgbModule.forRoot(), 
     HttpModule,
     RuteoModule,
     GalleriaModule
   ],
-  providers: [MiHttpService, UsuarioService, ArchivoUsuarioService, AuthService, VerificarJwtService],
+  providers: [MiHttpService, UsuarioService, ArchivoUsuarioService, AuthService, 
+    AdministradorAuthService, EncargadoAuthService, EmpleadoAuthService, ClienteAuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

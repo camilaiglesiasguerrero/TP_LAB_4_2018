@@ -3,9 +3,8 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angul
 import { Router }  from '@angular/router';
 import { AuthService } from './auth.service';
 
-
 @Injectable()
-export class VerificarJwtService implements CanActivate {
+export class AdministradorAuthService implements CanActivate {
 
   constructor( private router: Router, private auth: AuthService ) {
     console.log('isLogued()', auth.isLogued());
@@ -13,11 +12,11 @@ export class VerificarJwtService implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> {
         let url: string = state.url;
-        console.log('url dentro de canActivate', url);
+        /*console.log('url dentro de canActivate', url);
         console.log(route);
-        console.log(state);
+        console.log(state);*/
 
-        if ( this.auth.isLogued() && localStorage.getItem('tipo') == 'pepe' )
+        if ( this.auth.isLogued() && localStorage.getItem('tipo') == 'admin' )
         {
           return true;
         }
