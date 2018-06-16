@@ -10,13 +10,16 @@ export class CabeceraComponent implements OnInit {
   
   logueado : boolean = false;
   constructor(private route: ActivatedRoute,
-    private router: Router) { 
+    private router: Router) {
+       
     }
 
   @Input() usuario : any;
 
   ngOnInit() {
     localStorage.setItem('usuario','invitado');
+    localStorage.setItem('token',null);
+      
   }
 
   irA(donde : string){
@@ -28,7 +31,9 @@ export class CabeceraComponent implements OnInit {
       case 'Deslogueo':
         try 
         {
-          localStorage.setItem('token', null);
+          localStorage.setItem("tipo",null);
+          localStorage.setItem("usuario","invitado");
+          localStorage.setItem("token", null);
           this.logueado = false;
           this.router.navigate(['/Principal']);
         } 
@@ -41,16 +46,13 @@ export class CabeceraComponent implements OnInit {
         this.router.navigate(['/Ingresar']);
         break;
       case 'Reservar':
-        if(localStorage.getItem('usuario') != 'invitado')
-          this.router.navigate(['/Reserva']);
+        if(localStorage.getItem("token") == "null" || localStorage.getItem("token") == undefined || localStorage.getItem("token") == null  )
+          this.router.navigate(['/Ingresar/Cliente']);
         else
-          { console.log(localStorage.getItem('usuario'));
-            this.router.navigate(['/Ingresar']);
-          }
+          this.router.navigate(['/Reserva']); 
+          
         break;
-      case 'Encuesta':
-        this.router.navigate(['Encuesta']);
-        break;
+  
   }
 }
     

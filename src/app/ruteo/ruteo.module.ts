@@ -17,15 +17,18 @@ import { ErrorComponent } from '../componentes/error/error.component';
 import { RegistroComponent } from '../Componentes/registro/registro.component';
 import { ListadoComponent } from '../componentes/listado/listado.component';
 import { ReservaComponent } from '../componentes/reserva/reserva.component';
+import { ClienteAuthService } from '../servicios/auth/cliente-auth.service';
 
 const MiRuteo = [
   {path: '' , component: PrincipalComponent},
   {path:'Principal', component: PrincipalComponent},
   {path:'Ingresar', component: LoginComponent},
+  {path:'Ingresar/Cliente', component: LoginComponent},
   {path: 'Encuesta', component: EncuestaComponent, canActivate: [AdministradorAuthService] },
-  {path: 'Registro', component: RegistroComponent},
-  {path: 'Reserva', component: ReservaComponent},
+  {path: 'Registro', component: RegistroComponent, canActivate: [AdministradorAuthService,ClienteAuthService] },
+  {path: 'Reserva', component: ReservaComponent, canActivate: [ClienteAuthService] },
   {path: 'Reservas', component: ListadoComponent},
+  {path: 'Dashboard', component: ListadoComponent},
   {path:'**', component: ErrorComponent}
   
   

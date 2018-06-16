@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MiHttpService } from '../servicios/mi-http.service';
+import { Cliente } from '../clases/cliente';
 
 @Injectable()
 export class ArchivoUsuarioService {
@@ -11,11 +12,15 @@ export class ArchivoUsuarioService {
     var tipo = JSON.parse(data.text()).tipo.tipo;
     //localStorage.clear();
     localStorage.setItem("tipo",tipo);
-    //console.info(localStorage);
+    console.info(localStorage);
     var token = JSON.parse(data.text()).token;
      // console.log(token);
       callback(token);
     }); 
+  }
+
+  CrearCliente(cliente: Cliente){
+    this.mihttp.CrearCliente(cliente);
   }
 
 }

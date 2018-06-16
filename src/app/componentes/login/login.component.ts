@@ -15,14 +15,19 @@ export class LoginComponent implements OnInit {
   private _danger = new Subject<string>();
   staticAlertClosed = false;
   dangerMessage: string;
-  captcha : string = null;
+  esCliente: boolean;
 
   constructor(private usuarioS : UsuarioService, private route: ActivatedRoute,
     private router: Router) { 
     this.usuario = new Persona();
   }
 
+  
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      if(this.router.url == '/Ingresar/Cliente')
+        this.esCliente = true;
+    });
     setTimeout(() => this.staticAlertClosed = true, 20000);
 
     this._danger.subscribe((message) => this.dangerMessage = message);
@@ -30,14 +35,11 @@ export class LoginComponent implements OnInit {
       debounceTime(5000)
     ).subscribe(() => this.dangerMessage = null);
   }
- 
+
 Entrar(){
-  if(this.usuario.usuario==null || this.usuario.clave==null || this.captcha == null )
+  if(this.usuario.usuario==null || this.usuario.clave==null )
     {
-      if(this.captcha == null)
-        this._danger.next('No olvides resolver el captcha');
-      else
-        this._danger.next(`Por favor completar usuario y clave.`);
+       this._danger.next(`Por favor completar usuario y clave.`);
     }
     else
     {
@@ -45,19 +47,45 @@ Entrar(){
       if(token!=undefined)
         {
           //console.info (token); 
-          sessionStorage.clear();
-          sessionStorage.setItem("token",token);
+          //sessionStorage.clear();
+          //sessionStorage.setItem("token",token);
+          
           localStorage.setItem("token",token);
           localStorage.setItem("usuario",this.usuario.usuario);
-          this.router.navigate(['/Principal']);
+          if(this.esCliente) 
+            this.router.navigate(['/Reserva']);
+          else
+            this.router.navigate(['/Dashboard']);
         }
     });
   }
-} 
-
-resolved(captchaResponse: string) {
-  this.captcha = captchaResponse;
-  //console.log(`Resolved captcha with response ${captchaResponse}:`);
 }
+  
+  EntrarComo(num : number){
+    switch(num){
+      case 1:
+        this.usuario.usuario = 'administrador';
+        this.usuario.clave = 'admin';
+        this.usuario.tipo = 'admin';
+        break;
+      case 2:
+        this.usuario.usuario = 'cliente';
+        this.usuario.clave = 'cliente';
+        this.usuario.tipo = 'cliente';
+        break;
+      case 3:  
+        this.usuario.usuario = 'encargado';
+        this.usuario.clave = 'encargado';
+        this.usuario.tipo = 'encargado';
+        break;
+      case 4:  
+        this.usuario.usuario = 'remisero';
+        this.usuario.clave = 'remisero';
+        this.usuario.tipo = 'remisero';
+        break;
+    }
+    this.Entrar();
+  }
+
 
 }

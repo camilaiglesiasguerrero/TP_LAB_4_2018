@@ -4,11 +4,8 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'formatoHora'
 })
 export class FormatoHoraPipe implements PipeTransform {
-    transform(value: any, args?:any):any{
-      value = localStorage.getItem('usuario');
-      return value;
-    }
-/*  transform(value: any, args?: any): any {
+   
+ transform(value: any, args?: any): any {
       let ahora=Date.now();
       let antes= Date.parse(value);
       let milisegundo=ahora- antes;
@@ -52,7 +49,7 @@ export class FormatoHoraPipe implements PipeTransform {
       mensaje ="Recien ";
     }  
       return mensaje;
-    }*/
+    }
 }
 
 

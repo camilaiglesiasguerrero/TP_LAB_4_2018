@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ArchivoUsuarioService } from '../servicios/archivo-usuario.service';
+import { Cliente } from '../clases/cliente';
 
 @Injectable()
 export class UsuarioService {
@@ -11,5 +12,10 @@ export class UsuarioService {
     callback(token);
     });
   }
+
+  CrearCliente(cliente: Cliente){
+    this.archivoUsuarioS.CrearCliente(cliente);
+  }
+  
 
 }

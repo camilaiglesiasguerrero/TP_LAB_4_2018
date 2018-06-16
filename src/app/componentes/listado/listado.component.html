@@ -1,3 +1,31 @@
-<p>
-  listado works!
-</p>
+<div class="container">
+  <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Origen</th>
+          <th>Destino</th>
+          <th>Observaciones</th>
+          <th>Medio de pago</th>
+          <th>Vehículo</th>
+          <th>Chofer Asignado</th>
+          <th>Estado</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr [appEstado]="item.estado" *ngFor="let item of listado">
+          <td>{{item.fecha}}</td>
+          <td>{{item.origen}}</td>
+          <td>{{item.destino}} </td>
+          <td>{{item.observaciones}} </td>
+          <td>{{item.mpago}}</td>
+          <td>{{item.vehiculo}} </td>
+          <td>{{item.chofer}} </td>
+          <td>{{item.estado}}</td>
+          <td><i class="fa fa-pencil" (click)="Modificar(p.id)"></i>
+            <i hidden>{{p.id}}</i></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

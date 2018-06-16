@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { GalleriaModule } from 'primeng/galleria';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+
 //Captcha
 import { RecaptchaModule } from 'ng-recaptcha';
 
@@ -36,6 +38,9 @@ import { EmpleadoAuthService } from './servicios/auth/empleado-auth.service';
 import { ClienteAuthService } from './servicios/auth/cliente-auth.service';
 //PIPE
 import { FormatoHoraPipe } from './pipes/formato-hora.pipe';
+import { CaptchaComponent } from './componentes/captcha/captcha.component';
+import { EstadoDirective } from './Directivas/estado.directive';
+
 
 
 
@@ -53,7 +58,9 @@ import { FormatoHoraPipe } from './pipes/formato-hora.pipe';
     CarrouselComponent,
     ErrorComponent,
     ReservaComponent,
-    FormatoHoraPipe
+    FormatoHoraPipe,
+    CaptchaComponent,
+    EstadoDirective
   ],
   imports: [
     BrowserModule,

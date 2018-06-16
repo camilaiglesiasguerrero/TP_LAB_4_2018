@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListadoComponent implements OnInit {
 
+  public listado: Array<any>;
+
   constructor() { }
 
   ngOnInit() {

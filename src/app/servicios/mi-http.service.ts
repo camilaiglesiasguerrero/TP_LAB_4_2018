@@ -6,6 +6,7 @@ import { Observable }     from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
+import { Cliente } from '../clases/cliente';
 
 
 @Injectable()
@@ -34,6 +35,25 @@ export class MiHttpService {
           alert("Usuario y/o Clave no son válidos");
         });
   }
+
+  CrearCliente(cliente: Cliente){ 
+   
+    let data = new URLSearchParams();
+    data.append('tipo', cliente.tipo);
+    data.append('usuario', cliente.usuario);
+    data.append('clave', cliente.clave);
+    data.append('direccion',cliente.direccion);
+    data.append('telefono',cliente.telefono);
+    
+    return this.http
+      .post(this.url + 'Usuario', data)
+        .subscribe(data => {
+            console.log(data);
+        }, error => {
+            console.log(error.json());
+        });
+  }
+
 
 
 }

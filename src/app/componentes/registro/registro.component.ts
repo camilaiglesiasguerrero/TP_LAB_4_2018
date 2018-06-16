@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Validators, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-
-function copiaClave(input: FormControl) {
-
-      if (input.root.get('clave') == null) {
-        return null;
-      }
-
-      const verificar = input.root.get('clave').value === input.value;
-      return verificar ? null : { mismaClave : true };
-  }
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from "rxjs";
+import { TimerObservable } from "rxjs/observable/TimerObservable";
+import { UsuarioService } from '../../servicios/usuario.service';
+import { Cliente } from '../../clases/cliente';
 
 @Component({
   selector: 'app-registro',
@@ -18,78 +13,153 @@ function copiaClave(input: FormControl) {
   styleUrls: ['./registro.component.css']
 })
 export class RegistroComponent implements OnInit {
+  closeResult: string;
+  mensaje: string = "";
+  flag: boolean = false;
+  elCaptcha : string = 'jkhkjhk';
+  proceso : boolean = true;
+  progresoMensaje : string;
+  progreso: number;
+  ProgresoDeAncho:string;
+  clase="progress-bar progress-bar-info progress-bar-striped ";
+  private subscription: Subscription;
+  servicioUsuario : UsuarioService;
 
-  constructor(private builder: FormBuilder) { }
+  constructor(private builder: FormBuilder, private modalService: NgbModal, private route: ActivatedRoute,
+    private router: Router, private usuarioS: UsuarioService) { 
+      this.servicioUsuario = usuarioS;
+  }
 
-  email = new FormControl('', [
+  
+  open(content) {
+    this.progreso=0;
+    this.ProgresoDeAncho="0%";
+
+    this.usuario.setValue('');
+    this.telefono.setValue('');
+    this.clave.setValue('');
+    this.direccion.setValue('');
+    this.captcha.setValue('');    
+
+    this.modalService.open(content).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+      this.MoverBarraDeProgreso();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
+  }
+
+  usuario = new FormControl('', [
     Validators.required,
     Validators.minLength(5)
   ]);
   
+  captcha = new FormControl('', [
+    Validators.required,
+  ]);
+
   clave = new FormControl('', [
     Validators.required
   ]);
-  
-  copiaClave = new FormControl('', [
-    Validators.required,
-    copiaClave
+
+  direccion = new FormControl('',[
+    Validators.required
   ]);
 
+  telefono = new FormControl('',[
+    Validators.required
+  ]);
+
+
   registroForm: FormGroup = this.builder.group({
-    email: this.email,
+    usuario: this.usuario,
     clave: this.clave,
-    copiaClave: this.copiaClave,
-    captcha: new FormControl(),
+    telefono: this.telefono,
+    captcha: this.captcha,
   });
 
   ngOnInit() {
-  }
-
-  Registrar(){
-    alert("Usuario Registrado");
-    console.log(this.registroForm.get('email').value); 
-  }
-
-
-/*  MoverBarraDeProgreso() {
     
-    this.logueando=false;
+  }
+
+
+  
+  resolved(captchaResponse: string) {
+    this.captcha.setValue(captchaResponse);
+    this.elCaptcha = captchaResponse;
+    
+    //console.log(`Resolved captcha with response ${captchaResponse}:`);
+  }
+  
+
+  MoverBarraDeProgreso() {
+    this.proceso=false;
     this.clase="progress-bar progress-bar-danger progress-bar-striped active";
-    this.progresoMensaje="NSA spy..."; 
+    this.progresoMensaje="Verificando usuario"; 
     let timer = TimerObservable.create(200, 50);
     this.subscription = timer.subscribe(t => {
-      console.log("inicio");
+      //console.log("inicio");
       this.progreso=this.progreso+1;
       this.ProgresoDeAncho=this.progreso+20+"%";
       switch (this.progreso) {
+        case 2:
+        this.CrearCliente();
+        break;
         case 15:
         this.clase="progress-bar progress-bar-warning progress-bar-striped active";
-        this.progresoMensaje="Verificando ADN..."; 
+        //this.progresoMensaje="Validando usuario"; 
           break;
         case 30:
           this.clase="progress-bar progress-bar-Info progress-bar-striped active";
-          this.progresoMensaje="Adjustando encriptación.."; 
+         // this.progresoMensaje="Adjustando encriptación.."; 
           break;
           case 60:
           this.clase="progress-bar progress-bar-success progress-bar-striped active";
-          this.progresoMensaje="Recompilando Info del dispositivo..";
+          this.progresoMensaje="Creando usuario";
           break;
           case 75:
           this.clase="progress-bar progress-bar-success progress-bar-striped active";
-          this.progresoMensaje="Recompilando claves facebook, gmail, chats..";
+        //  this.progresoMensaje="Recompilando claves facebook, gmail, chats..";
           break;
           case 85:
           this.clase="progress-bar progress-bar-success progress-bar-striped active";
-          this.progresoMensaje="Instalando KeyLogger..";
+         // this.progresoMensaje="Instalando KeyLogger..";
           break;
-          
+          case 99:
+          this.mensaje = "Usuario creado con éxito";
+          break;
         case 100:
-          console.log("final");
+         // console.log("final");
+         
           this.subscription.unsubscribe();
-          this.Entrar();
+          this.Registrar();
           break;
       }     
     });
-    //this.logeando=true;
-  }*/
+  }
+
+  Registrar(){
+    this.router.navigate(['Principal']);
+  }
+
+  CrearCliente(){
+    var cliente = new Cliente();
+    cliente.tipo = 'Cliente';
+    cliente.usuario = this.usuario.value;
+    cliente.clave = this.clave.value;
+    cliente.direccion = this.direccion.value;
+    cliente.telefono = this.telefono.value;
+
+    this.servicioUsuario.CrearCliente(cliente);
+  }
 }
