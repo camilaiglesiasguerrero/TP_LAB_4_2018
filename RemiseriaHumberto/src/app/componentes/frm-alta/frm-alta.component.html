@@ -1,0 +1,63 @@
+<app-menu></app-menu>
+<ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+<ngb-alert *ngIf="dangerMessage" type="danger" (close)="dangerMessage = null">{{ dangerMessage }}</ngb-alert>
+
+<div style="text-align: right; margin-top: 2%; margin-right: 2%">
+  <button type="button" class="btn btn-default miBtn" popover="Agregar" triggers="mouseenter:mouseleave" (click)="Agregar()" ><span  class="fa fa-plus"></span> Agregar</button>
+</div>
+
+<div class="container" style="text-align:center; margin-top:3%" [hidden]=!agregar>
+  <form [hidden]=!sonRemiseros>
+    <div class="container">
+          <strong>NUEVO REMISERO</strong>
+      <br><br>
+      <input type="text" placeholder="Nombre" name="nombre" [(ngModel)]="nombre" required>
+      <br>
+      <br>
+      <input type="text" placeholder="Apellido" name="apellido"  [(ngModel)]="apellido" required>
+      <br>
+      <br>
+      <input type="email" placeholder="Email" name="email" [(ngModel)]="email" required>
+      <br>
+      <br>
+      <input type="number" placeholder="Teléfono" name="telefono" [(ngModel)]="telefono" required>
+      <div style="margin-top: 3%">
+        <button type="submit" class="btn btn-success" (click)="Guardar()" >Guardar</button>
+      </div>
+    </div>
+  </form>
+
+  <!--AUTOS-->
+  <form [hidden]=!sonAutos>
+      <div class="container">
+            <strong>NUEVO AUTO</strong>
+        <br><br>
+        <input type="text" placeholder="Marca" name="marca" [(ngModel)]="marca" required>
+        <br>
+        <br>
+        <input type="text" placeholder="Modelo" name="modelo"  [(ngModel)]="modelo" required>
+        <br>
+        <br>
+        <select name="categoria" id="categoria" [(ngModel)]="categoria" >
+            <option value="std"selected>Standard</option>
+            <option value="ej">Ejecutivo</option>
+            <option value="sedan">Sedán</option>
+            <option value="transfer">Transfer</option>
+            <option value="flete">Pequeño Flete</option>
+        </select>
+        <br>
+        <br>
+        <input type="text" placeholder="Patente" name="patente" [(ngModel)]="patente" required>
+        <br>
+        <br>
+        <div style="margin-top: 3%">
+          <button type="submit" class="btn btn-success" (click)="Guardar()" >Guardar</button>
+        </div>
+      </div>
+    </form>
+</div>                  
+
+
+
+
+<app-listado [listado]=listado [sonAutos]=sonAutos [sonRemiseros]=sonRemiseros ></app-listado>

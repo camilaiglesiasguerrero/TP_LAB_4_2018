@@ -1,0 +1,187 @@
+<ngb-alert *ngIf="dangerMessage" type="danger" (close)="dangerMessage = null">{{ dangerMessage }}</ngb-alert>
+
+
+<!--TABLA DE VIAJES GENERAL-->
+<table class="table table-condensed" style="table-layout:fixed" [hidden]='!sonViajes || asignar'> 
+    <thead>
+        <tr>
+            <th hidden>id</th>
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Fecha y Hora</th>
+            <th>Duración</th>
+            <th>Distancia</th>
+            <th>Tipo de vehículo</th>
+            <th style='width: 10%;'>Precio</th>
+            <th>Medio de pago</th>
+            <th>Chofer asignado</th>
+            <th>Vehículo asignado</th>
+            <th>Estado</th>
+            <th [hidden]=!esCliente ></th>
+            <th [hidden]=!esRemisero ></th>
+        </tr>
+      </thead>
+  <tbody>
+        <tr appEstado [estado]=item.estado *ngFor="let item of listado"> 
+            <td hidden>{{item.id}}</td>        
+            <td>{{item.origen | direccion}}</td>        
+            <td>{{item.destino | direccion}}</td>        
+            <td>{{item.fecha | fecha}} {{item.hora | hora}}</td>        
+            <td>{{item.duracion}}</td>
+            <td>{{item.distancia}}</td>
+            <td>{{item.tipoServicio | tipoV}}</td>
+            <td *ngIf='!finalizar'>{{item.valor | precio:1}}</td>
+            <td style='width: 15%;' *ngIf='finalizar'>
+                <input type="number" style="width: 70%" [value]=valor [(ngModel)]=valor></td>
+            <td *ngIf=!finalizar >{{item.medioPago | medioP}}</td>
+            <td *ngIf=finalizar >
+                    <select style="font-size: 12px" id="medioP"  [(ngModel)]='medioP' class="form-control" >
+                        <option value="eft"selected>Efectivo</option>
+                        <option value="ctacte">Cuenta Corriente</option>
+                    </select>
+            </td>
+            <td>{{item.chofer}}</td>
+            <td>{{item.auto}}</td>
+            <td >{{item.estado}}</td>
+            <td [hidden]=!esCliente>
+                <div *ngIf='item.deshabilitado' >
+                    <button disabled type="button" class="btn btn-warning miBtn" popover="Editar viaje" triggers="mouseenter:mouseleave" ><span class="fa fa-pencil"></span></button>
+                    <button disabled type="button" class="btn btn-danger miBtn" popover="Cancelar viaje" triggers="mouseenter:mouseleave" ><span class="fa fa-ban"></span></button>
+                    <button type="button" class="btn btn-success miBtn" popover="Responder encuesta" triggers="mouseenter:mouseleave" (click)='Encuesta(item.id)' ><span  class="fa fa-check-circle"></span></button>
+                    <button type="button" class="btn btn-default miBtn" popover="Ver ruta" triggers="mouseenter:mouseleave" (click)='VerMapa(item.id)' ><span  class="fa fa-eye"></span></button>
+                </div>
+                <div *ngIf='!item.deshabilitado' >
+                    <button type="button" class="btn btn-warning miBtn" popover="Editar viaje" triggers="mouseenter:mouseleave" (click)="Editar(item.id)" ><span  class="fa fa-pencil"></span></button>
+                    <button type="button" class="btn btn-danger miBtn" popover="Cancelar viaje" triggers="mouseenter:mouseleave" (click)="Cancelar(item.id)" ><span  class="fa fa-ban"></span></button>
+                    <button disabled type="button" class="btn btn-success miBtn" popover="Responder encuesta" triggers="mouseenter:mouseleave" ><span class="fa fa-check-circle"></span></button>
+                    <button type="button" class="btn btn-default miBtn" popover="Ver ruta" triggers="mouseenter:mouseleave" (click)='VerMapa(item.id)' ><span  class="fa fa-eye"></span></button>
+                </div>
+            </td>
+            <div *ngIf='item.deshabilitado' >
+                <td [hidden]='!esRemisero || !finalizar' ><button type="button" class="btn btn-success miBtn" popover="Dar por finalizado" triggers="mouseenter:mouseleave" (click)="Finalizar(item.id)" ><span  class="fa fa-check"></span></button></td>
+                <td [hidden]='!esRemisero || finalizar' ><button type="button" class="btn btn-warning miBtn" popover="Dar por finalizado" triggers="mouseenter:mouseleave" (click)="Preparar(item)" ><span  class="fa fa-check"></span></button></td>
+            </div>
+        </tr>  
+  </tbody> 
+</table>
+
+
+
+<!--TABLA DE VIAJES PARA ASIGNAR-->
+<table class="table table-condensed" style="table-layout:fixed" [hidden]='!sonViajes || !asignar'> 
+        <thead>
+            <tr>
+                <th hidden>id</th>
+                <th>Origen</th>
+                <th>Destino</th>
+                <th>Fecha y Hora</th>
+                <th>Tipo de vehículo</th>
+                <th>Chofer asignado</th>
+                <th>Vehículo asignado</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+          </thead>
+          <tbody>
+                <tr *ngFor="let item of listado"  appEstado [estado]=item.estado> 
+                    <td hidden >{{item.id}}</td>        
+                    <td>{{item.origen | direccion}}</td>        
+                    <td>{{item.destino | direccion}}</td>        
+                    <td>{{item.fecha | fecha}} {{item.hora | hora}}</td>        
+                    <td>{{item.tipoServicio | tipoV}}</td>
+                    <td *ngIf=item.chofer>{{item.chofer}}</td>
+                    <td *ngIf=!item.chofer>
+                        <select [(ngModel)]='chofer' name="chofer"   >
+                            <option *ngFor="let r of remiseros" value="{{r.apellido}}, {{r.nombre}}">{{r.nombre}} {{r.apellido}}</option>
+                        </select>
+                    </td>
+                    <td *ngIf=item.auto>{{item.auto}}</td>
+                    <td *ngIf=!item.auto>
+                            <select [(ngModel)]='auto' name="auto"  >
+                                <option *ngFor="let a of autos" [hidden]='a.categoria !== item.tipoServicio' value="{{a.patente}}" >{{a.marca}} {{a.modelo}} {{a.patente}}</option>
+                            </select>
+                        </td>
+                        <td>{{item.estado}}</td>
+                        <td><button type="button" class="btn btn-warning miBtn" popover="Asignar viaje" triggers="mouseenter:mouseleave" (click)="Asignar(item.id, item.fecha, item.hora)" ><span  class="fa fa-check"></span></button></td>
+                </tr>  
+          </tbody> 
+        </table>
+        
+
+<!--TABLA DE REMISEROS-->
+<table class="table table-condensed" style="table-layout:fixed" [hidden]='!sonRemiseros'> 
+    <thead>
+        <tr>
+            <th hidden>id</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Calificación</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+      </thead>
+      <tbody>
+            <tr *ngFor="let item of listado"> 
+                <td hidden>{{item.id}}</td>        
+                <td *ngIf='!habilitaEdicion || (item.id !== elId)'>{{item.nombre}}</td>        
+                <td *ngIf='habilitaEdicion  && (item.id === elId)'><input type="text" [(ngModel)]=nombre [value]='nombre'></td>        
+                <td *ngIf='!habilitaEdicion || (item.id !== elId)' >{{item.apellido}}</td>        
+                <td *ngIf='habilitaEdicion  && (item.id === elId)'><input type="text" [(ngModel)]=apellido [value]='apellido'></td>        
+                <td style="font-family: stars">{{item.calificacion | estrellas }}</td>        
+                <td >{{item.email}}</td>
+                <td *ngIf='!habilitaEdicion || (item.id !== elId)'>{{item.telefono}}</td>
+                <td *ngIf='habilitaEdicion  && (item.id === elId)'><input type="number" [(ngModel)]=telefono [value]='telefono'></td>        
+                <td>{{item.estado}}</td>
+                <td>
+                    <button *ngIf='!habilitaEdicion || (item.id !== elId)' type="button" class="btn btn-warning miBtn" popover="Editar chofer" triggers="mouseenter:mouseleave" (click)="EditFrm(item)" ><span  class="fa fa-pencil"></span></button>
+                    <button *ngIf='habilitaEdicion  && (item.id === elId)' type="button" class="btn btn-success miBtn" popover="Editar chofer" triggers="mouseenter:mouseleave" (click)="Guardar(item)" ><span  class="fa fa-check"></span></button>
+                    <button *ngIf="item.estado === 'Activo'" type="button" class="btn btn-danger miBtn" popover="Inhabilitar chofer" triggers="mouseenter:mouseleave" (click)="Inhabilitar(item.id, item.estado)" ><span  class="fa fa-times"></span></button>
+                    <button *ngIf="item.estado !== 'Activo'" type="button" class="btn btn-success miBtn" popover="Rehabilitar chofer" triggers="mouseenter:mouseleave" (click)="Inhabilitar(item.id, item.estado)" ><span  class="fa fa-check"></span></button>
+                </td>
+            </tr>  
+      </tbody> 
+    </table>
+
+<!--TABLA DE AUTOS-->
+<table class="table table-condensed" style="table-layout:fixed" [hidden]='!sonAutos'> 
+    <thead>
+        <tr>
+            <th hidden>id</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Patente</th>
+            <th>Categoría</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+      </thead>
+      <tbody>
+            <tr *ngFor="let item of listado"> 
+                <td hidden >{{item.id}}</td>        
+                <td *ngIf='!habilitaEdicion || (item.id !== elId)'>{{item.marca}}</td>        
+                <td *ngIf='habilitaEdicion  && (item.id === elId)'><input type="text" [value]='marca' [(ngModel)]='marca'></td>        
+                <td *ngIf='!habilitaEdicion || (item.id !== elId)'>{{item.modelo}}</td>        
+                <td *ngIf='habilitaEdicion  && (item.id === elId)'><input type="text" [value]='modelo' [(ngModel)]='modelo'></td>        
+                <td *ngIf='!habilitaEdicion || (item.id !== elId)'>{{item.patente}}</td>        
+                <td *ngIf='habilitaEdicion  && (item.id === elId)'><input type="text" [value]='patente' [(ngModel)]='patente'></td>        
+                <td *ngIf='!habilitaEdicion || (item.id !== elId)'>{{item.categoria | tipoV}}</td>        
+                <td *ngIf='habilitaEdicion  && (item.id === elId)'><select name="categoria" id="categoria" [(ngModel)]="categoria" >
+                        <option value="std"selected>Standard</option>
+                        <option value="ej">Ejecutivo</option>
+                        <option value="sedan">Sedán</option>
+                        <option value="transfer">Transfer</option>
+                        <option value="flete">Pequeño Flete</option>
+                    </select></td>        
+                <td>{{item.estado}}</td>
+                <td>
+                    <button *ngIf='!habilitaEdicion || (item.id !== elId)' type="button" class="btn btn-warning miBtn" popover="Editar vehículo" triggers="mouseenter:mouseleave" (click)="EditFrm(item)" ><span  class="fa fa-pencil"></span></button>
+                    <button *ngIf='habilitaEdicion  && (item.id === elId)' type="button" class="btn btn-success miBtn" popover="Editar vehículo" triggers="mouseenter:mouseleave" (click)="Guardar()" ><span  class="fa fa-check"></span></button>
+                    <button *ngIf="item.estado === 'Activo'" type="button" class="btn btn-danger miBtn" popover="Inhabilitar vehículo" triggers="mouseenter:mouseleave" (click)="Inhabilitar(item.id, item.estado)" ><span  class="fa fa-times"></span></button>
+                    <button *ngIf="item.estado !== 'Activo'" type="button" class="btn btn-success miBtn" popover="Rehabilitar vehículo" triggers="mouseenter:mouseleave" (click)="Inhabilitar(item.id, item.estado)" ><span  class="fa fa-check"></span></button>
+                </td>
+            </tr>  
+      </tbody> 
+    </table>
+

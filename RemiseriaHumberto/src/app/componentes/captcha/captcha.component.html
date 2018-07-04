@@ -1,0 +1,5 @@
+<input type="text" [(ngModel)]='captcha.captcha' readonly class='miCaptcha'>
+<input type="text" placeholder="Repetí el texto"  (change)="Validar($event)"  [(ngModel)]='captcha.rta' class='rta'>
+
+<button type="button" class='btn btn-default' (click)='Generar()'><i class="fa fa-retweet"></i></button>
+

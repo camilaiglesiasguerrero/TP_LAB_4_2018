@@ -1,0 +1,66 @@
+<app-menu></app-menu>
+<div style="font-size: 40px; text-align: center; font-family: Delius">
+    <strong >Reserva</strong>
+</div>
+<br><br>
+              <ngb-alert *ngIf="dangerMessage" type="danger" (close)="dangerMessage = null">{{ dangerMessage }}</ngb-alert>
+              
+              <div class="container-fluid" >
+                  <form>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="fecha">Fecha</label>
+                          <div class="input-group-append">
+                          <input style="vertical-align: middle" [formControl]="dia" class="form-control" placeholder="dd-mm-aaaa"
+                          name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" readonly>
+                            <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                <i class="fa fa-calendar" style="width: 1.2rem; height: 1rem; cursor: pointer;"> </i>
+                              </button>
+                              </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="Hora">Hora</label>
+                          <ngb-timepicker [spinners]="false" [formControl]="hora" [(ngModel)]="time" name="first"></ngb-timepicker>
+                        </div>
+                      </div>
+                      <!--<div class="form-group">
+                        <label for="Origen">Origen</label>
+                        <input type="text" class="form-control" [formControl]="Origen" id="Origen" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="Destino">Destino</label>
+                        <input type="text" class="form-control" id="Destino" [formControl]="Destino" required >
+                      </div>-->
+                     <app-mapa [hidden]='esModificacion' (direccion)='Direccion($event)'></app-mapa>
+                     <app-mapa [hidden]='!esModificacion' (direccion)='Direccion($event)'
+                            [origen]=origen [destino]=destino [esModificacion]=true [distancia]=distancia [duracion]=duracion></app-mapa> 
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="Obs">Observaciones</label>
+                          <input [formControl]="obs" type="text" class="form-control" id="Obs">
+                        </div>
+                        <div class="form-group col-md-4">
+                          <label >Medio de pago</label>
+                          <select [formControl]="medioP" id="medioP" class="form-control">
+                              <option value="eft"selected>Efectivo</option>
+                              <option value="ctacte">Cuenta Corriente</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                          <label for="vehiculo">Tipo de vehículo</label>
+                          <select [formControl]="tipoServ" id="vehiculo" class="form-control">
+                              <option value="std"selected>Standard</option>
+                              <option value="ej">Ejecutivo</option>
+                              <option value="sedan">Sedán</option>
+                              <option value="transfer">Transfer</option>
+                              <option value="flete">Pequeño Flete</option>
+                            </select>
+                        </div>
+                      </div>
+                      <app-captcha (valorCaptcha)="Validar($event)"></app-captcha>
+                    </form>
+              </div>
+<div style="text-align: center">
+  <button (click)='Reservar()' class="btn btn-success" [disabled]="!reservaForm.valid">Aceptar</button>
+  <button (click)='Cancelar()' class="btn btn-danger">Cancelar</button>
+</div>

@@ -1,0 +1,27 @@
+<app-menu></app-menu>
+<ngb-alert *ngIf="dangerMessage" type="danger" (close)="dangerMessage = null">{{ dangerMessage }}</ngb-alert>
+
+<div class="mje">{{mensaje}}</div>
+<div class="container" style="text-align:center; margin-top:3%">
+  <form>
+    <strong>INICIAR SESION</strong>
+    <br><br>
+     <input type="text" placeholder="Usuario" [(ngModel)] = 'usuario.email'  name="name" style="width:20%" required>
+     <br><br><input type="password" placeholder="Clave" [(ngModel)] = 'usuario.clave'  name="psw" style="width:20%" required>
+    <br> <br>
+    <label><b>Tipo de usuario</b></label>
+    <select [(ngModel)]="tipo" name="Tipo" id="tipo">
+        <option value="admin">Administrador</option>
+        <option value="encargado">Encargado</option>
+        <option value="remisero">Remisero</option>
+        <option value="cliente" selected>Cliente</option>
+    </select> 
+    <br><br><button type="button" class="btn btn-success"  (click)="Entrar()" >Ingresar</button> 
+  </form>
+  <br><br>
+  <strong>Ingresar como:</strong>
+  <button class='btn btn-default'  (click)='EntrarComo(4)'>Administrador</button>
+  <button class='btn btn-default'  (click)='EntrarComo(1)'>Encargado</button>
+  <button class='btn btn-default'  (click)='EntrarComo(3)'>Remisero</button>
+  <button class='btn btn-default'  (click)='EntrarComo(2)'>Cliente</button>
+</div>

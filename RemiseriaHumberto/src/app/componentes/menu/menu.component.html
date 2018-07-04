@@ -1,0 +1,76 @@
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" class="a">Bienvenido, {{user}}</a>
+      </li>
+      <li class="divider-vertical"></li>
+      <li class="nav-item active">
+        <a class="nav-link" (click)="irA('Principal')" class='a'><span class="fa fa-home"></span> Inicio</a>
+      </li>
+      <li class="divider-vertical"></li>
+
+      <!--<li class="nav-item">
+        <a class="nav-link" (click)="irA(2)" class='a'><span class="fa fa-car"></span> Nuestra flota</a>
+      </li>
+      <li class="divider-vertical"></li>
+    -->
+      
+
+      <li class="nav-item active"[hidden]='!esCliente' >
+        <a class="nav-link"   (click)="irA('Reservar')" class='a'><span class="fa fa-check"></span> Reservar</a>
+      </li>
+      <li class="divider-vertical" [hidden]='!esCliente'></li>
+      
+      <li class="nav-item active" [hidden]='!estaLogueado'>
+          <a class="nav-link" (click)="irA('Viajes')" class='a'><span class="fa fa-list"></span> Viajes</a>
+        </li>
+        <li class="divider-vertical"[hidden]='!estaLogueado'></li>
+
+        <li class="nav-item active"[hidden]='!esEncargado' >
+            <a class="nav-link"   (click)="irA('Asignar')" class='a'><span class="fa fa-clipboard"></span> Pendientes de asignar</a>
+          </li>
+          <li class="divider-vertical" [hidden]='!esEncargado'></li>
+
+      <li class="nav-item active"[hidden]='!esEncargado' >
+        <a class="nav-link"   (click)="irA('Dashboard')" class='a'><span class="fa fa-bar-chart"></span> Dashboard</a>
+      </li>
+      <li class="divider-vertical" [hidden]='!esEncargado'></li>
+      
+      <li class="nav-item active"[hidden]='!esEncargado' >
+        <a class="nav-link"   (click)="irA('Autos')" class='a'><span class="fa fa-car"></span> Autos</a>
+      </li>
+      <li class="divider-vertical" [hidden]='!esEncargado'></li>
+      
+      <li class="nav-item active"[hidden]='!esEncargado' >
+        <a class="nav-link"   (click)="irA('Remiseros')" class='a'><span class="fa fa-user"></span> Remiseros</a>
+      </li>
+      <li class="divider-vertical" [hidden]='!esEncargado'></li>
+      
+      
+
+      <li class="nav-item active" [hidden]='estaLogueado' >
+        <a class="nav-link"   (click)="irA('Logueo')" class='a'><span class="fa fa-check"></span> Ingresar</a>
+      </li>
+      <li class="divider-vertical"[hidden]='estaLogueado'></li>
+
+      <li class="nav-item active" [hidden]='estaLogueado' >
+        <a class="nav-link"   (click)="irA('Registrarme')" class='a'><span class="fa fa-check"></span> Registrarme</a>
+      </li>
+      <li class="divider-vertical"[hidden]='estaLogueado'></li>
+
+      <li class="nav-item active" [hidden]='!estaLogueado'>
+        <a class="nav-link" (click)="irA('Deslogueo')" class='a'><span class="fa fa-sign-out"></span> Salir</a>
+      </li>
+      <li class="divider-vertical"[hidden]='!estaLogueado' ></li>
+</ul>
+
+    
+  </div>
+</nav>
+
+

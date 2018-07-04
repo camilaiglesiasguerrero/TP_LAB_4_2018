@@ -1,0 +1,48 @@
+<ngb-alert *ngIf="dangerMessage" type="danger" (close)="dangerMessage = null">{{ dangerMessage }}</ngb-alert>
+<table class="table table-condensed"> 
+      
+  <thead>
+        
+  </thead>
+  <tbody>
+        <tr> 
+            <td style="vertical-align: middle; width: 30%">
+
+                    <input [hidden]='!esModificacion' [(ngModel)]='origen' (focusout)="OrigenOut($event)" type="text" placeholder="Origen" autocorrect="off" autocapitalize="off" spellcheck="off" class="form-control" #search>
+                    <br>
+                    <input [hidden]='!esModificacion' [(ngModel)]='destino' (focusout)="DestinoOut($event)" type="text" placeholder="Destino" autocorrect="off" autocapitalize="off" spellcheck="off" class="form-control" #search2>
+                    <br>
+                    <input [hidden]='esModificacion' [(ngModel)]='ori' (focusout)="OrigenOut($event)" type="text" placeholder="Origen" autocorrect="off" autocapitalize="off" spellcheck="off" class="form-control" #search3>
+                    <br>
+                    <input [hidden]='esModificacion' [(ngModel)]='dest' (focusout)="DestinoOut($event)" type="text" placeholder="Destino" autocorrect="off" autocapitalize="off" spellcheck="off" class="form-control" #search4>
+                    <br><br>
+                    <div [hidden]='esModificacion'>
+                       {{elMensaje}}
+                       <div *ngFor='let a of misDirecciones'>
+                         <input type="radio" (changed)="eligeDireccion(a.summary,a.legs[0].duration['text'],a.legs[0].distance['text'])" [value]='a.summary'><strong> Opción {{a.summary}}:</strong> Distancia {{a.legs[0].distance['text']}} Duración {{a.legs[0].duration['text']}}
+                       </div>
+                    </div>
+                    <div [hidden]='!esModificacion'>
+                        {{distancia}} {{duracion}}
+                     </div>
+                    <br>
+                    <a appPrecioTipoV [valor]='laDistanciaMts | precio' [tipoV]=tipoV >{{laDistanciaMts | precio}}</a>
+            </td>        
+            <td style="width: 60%">
+                  <agm-map 
+                  [latitude]="lat"
+                  [longitude]="lng"
+                  [zoom]="zoom"
+                  [disableDefaultUI]="false"
+                  [zoomControl]="false"
+                  >
+                <!--(mapClick)="mapClicked($event)"-->
+                    <agm-direction [origin]="origin" [destination]="destination"> </agm-direction>
+                  </agm-map>
+            </td>        
+        </tr>   
+  </tbody> 
+</table>
+
+
+  

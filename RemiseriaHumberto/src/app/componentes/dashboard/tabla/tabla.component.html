@@ -1,0 +1,19 @@
+<h3 class="first">Basic</h3>
+<p-table [value]="cars">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Chofer</th>
+            <th>Auto</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-car>
+        <tr>
+            <td>{{car.origen}}</td>
+            <td>{{car.destino}}</td>
+            <td>{{car.chofer}}</td>
+            <td>{{car.auto}}</td>
+        </tr>
+    </ng-template>
+</p-table>

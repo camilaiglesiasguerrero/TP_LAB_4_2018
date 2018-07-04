@@ -1,0 +1,12 @@
+.navbar{
+    background-color: darkslategrey;
+    color: whitesmoke;    
+    font-size: 18px;
+}
+
+.navbar .divider-vertical {
+    height: 40px;
+    margin: 0 9px;
+    border-left: 0.5px solid rgb(81, 148, 103);
+    border-right:0.5px solid rgb(81, 148, 103);
+    }

@@ -1,0 +1,40 @@
+<app-menu></app-menu>
+
+<div class="container" style="text-align:center; margin-top:3%">
+    <form>
+      <strong>REGISTRARSE</strong>
+      <br><br>
+       
+  <form [formGroup]="registroForm"  (ngSubmit)="Registrar()" >
+    <div class="container">
+
+      <input type="email" placeholder="Email" name="email" [formControl]="email" required>
+      <br>
+      <br>
+      <input type="password" placeholder="Clave" name="psw"  [formControl]="clave" required>
+      <br>
+      <br>
+      <input type="password" placeholder="Repita su clave"  [formControl]="copiaClave" name="psw-repeat" required>
+      <br>
+      <br>
+      <label><b>Tipo de usuario</b></label>
+      <select [formControl]="tipo" name="Tipo" id="tipo">
+        <option value="admin">Encargado</option>
+        <option value="remisero">Remisero</option>
+        <option value="cliente">Cliente</option>
+      </select> 
+      <input [formControl]="captcha" name="captcha" required>
+      <div style="margin-left: 35%;">
+        <div style=" margin-top: 2%; margin-bottom: 2%">
+            <re-captcha (resolved)="resolved($event)" siteKey="6LfEKF4UAAAAAFY9SD3LQATL7j4Hak-pANt5_STg"></re-captcha>
+       </div>
+          <script src='https://www.google.com/recaptcha/api.js'></script>
+          
+    </div>
+       <div>
+        <button type="submit" class="btn btn-success" [disabled]="!registroForm.valid">Registrarme</button>
+      </div>
+    </div>
+  </form>
+  </form>
+</div>
