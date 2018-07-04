@@ -107,9 +107,7 @@ import { EstrellasPipe } from './pipes/estrellas.pipe';
     RuteoModule,
     AgmDirectionModule,
     AgmCoreModule.forRoot({
-      //bloqueada el 30/06 funciona 
-      apiKey: 'AIzaSyCin-h5KlbULoPjugwtWhGFo48GlDxD1Fc',
-      //apiKey: 'AIzaSyBmFOMZzSLViDvP44lp-yD9kwa-G_IuCdM',
+      apiKey:*****************************
       libraries : ['places']
     }),
     ChartModule,
