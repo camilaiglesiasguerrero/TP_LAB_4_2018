@@ -19,22 +19,23 @@ export class ViajesComponent implements OnInit {
       this.remiseros = new Array<any>();
       this.labels = new Array<any>();
       this.qty = new Array<any>();
-
+      var concat : string;
+      
       this.choferS.TraerTodos()
       .then(choferes=>{
         aux=choferes;
         for (let index = 0; index < aux.length; index++) {
-          var concat = aux[index].nombre + ' ' + aux[index].apellido;
+          concat = aux[index].nombre + ' ' + aux[index].apellido;
           this.remiseros.push({'nombre': concat, 'cantidad': 0});          
         }
-
+      
         this.viajeS.TraerTodos()
         .then(viajes => {
           aux = viajes;
-          for (let index = 0; index < aux.length; index++) {
-            for (let j = 0; j < this.remiseros.length; j++) {
+          for (let j = 0; j < this.remiseros.length; j++) {
+            for (let index = 0; index < aux.length; index++) {
               if(this.remiseros[j]['nombre'] == aux[index].chofer)
-              {
+              {          
                 this.remiseros[j]['cantidad'] ++;
             }
           }  
@@ -44,14 +45,15 @@ export class ViajesComponent implements OnInit {
             this.labels.push(this.remiseros[i]['nombre']);
             this.qty.push(this.remiseros[i]['cantidad']);    
           }
+          
           this.data = {
-              labels: [this.labels],
+              labels: this.labels,
               datasets: [
                   {
                       label: 'Viajes por remisero',
                       backgroundColor: '#42A5F5',
                       borderColor: '#1E88E5',
-                      data: [this.qty]
+                      data: this.qty
                   }
               ]
           }

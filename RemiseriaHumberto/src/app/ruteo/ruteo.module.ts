@@ -32,6 +32,7 @@ const MiRuteo = [
   {path: 'Asignar', component: NexoComponent, canActivate: [RoleGuardService], data: { expectedRole: 'encargado' }},
   {path: 'Autos', component: FrmAltaComponent, canActivate: [RoleGuardService], data: { expectedRole: 'encargado' }},
   {path: 'Remiseros', component: FrmAltaComponent, canActivate: [RoleGuardService], data: { expectedRole: 'encargado' }},
+  {path: 'Encargados', component: FrmAltaComponent, canActivate: [RoleGuardService], data: { expectedRole: 'admin' }},
   {path: 'Error', component: ErrorComponent},
   {path: 'Error/SesionExpirada',component: LoginComponent},
   {path: '**', component: ErrorComponent}

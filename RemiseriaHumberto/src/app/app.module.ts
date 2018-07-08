@@ -6,6 +6,8 @@ import { GalleriaModule } from 'primeng/galleria';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
 import { PopoverModule } from 'ngx-bootstrap/popover';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { FileSelectDirective } from 'ng2-file-upload';
 
 //Captcha
 import { RecaptchaModule } from 'ng-recaptcha';
@@ -38,8 +40,9 @@ import { TipoServComponent } from './componentes/dashboard/tipo-serv/tipo-serv.c
 import { ViajesComponent } from './componentes/dashboard/viajes/viajes.component';
 import { TablaComponent } from './componentes/dashboard/tabla/tabla.component';
 import { FrmAltaComponent } from './componentes/frm-alta/frm-alta.component';
+import { CalificacionComponent } from './componentes/dashboard/calificacion/calificacion.component';
 
-//SERVICIOS
+//SERVICIOS 
 import { HttpModule } from '@angular/http';
 import { AuthGuardService } from './servicios/auth/auth-guard.service';
 import { MiHttpService } from './servicios/mi-http.service';
@@ -56,12 +59,11 @@ import { HoraPipe } from './pipes/hora.pipe';
 import { DireccionPipe } from './pipes/direccion.pipe';
 import { TipoVPipe } from './pipes/tipo-v.pipe';
 import { MedioPPipe } from './pipes/medio-p.pipe';
+import { EstrellasPipe } from './pipes/estrellas.pipe';
 
 //DIRECTIVA
 import { PrecioTipoVDirective } from './directivas/precio-tipo-v.directive';
 import { EstadoDirective } from './directivas/estado.directive';
-import { EstrellasPipe } from './pipes/estrellas.pipe';
-
 
 @NgModule({
   declarations: [
@@ -93,7 +95,9 @@ import { EstrellasPipe } from './pipes/estrellas.pipe';
     TablaComponent,
     EstadoDirective,
     FrmAltaComponent,
-    EstrellasPipe
+    EstrellasPipe,
+    CalificacionComponent,
+    FileSelectDirective
   ],
   imports: [
     BrowserModule,
@@ -113,7 +117,8 @@ import { EstrellasPipe } from './pipes/estrellas.pipe';
       libraries : ['places']
     }),
     ChartModule,
-    TableModule
+    TableModule,
+    ProgressSpinnerModule
   ],
   providers: [MiHttpService,
     AuthGuardService,RoleGuardService,AuthService,UsuarioService,

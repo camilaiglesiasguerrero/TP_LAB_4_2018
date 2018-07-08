@@ -12,9 +12,6 @@ export class EstrellasPipe implements PipeTransform {
       aux += 'w';
      
     }
-    
-
-    
     return aux;
   }
 

@@ -5,12 +5,12 @@ import { Remisero } from '../clases/remisero';
 @Injectable({
   providedIn: 'root'
 })
-export class ChoferService {
+export class EncargadoService {
 
   constructor(private mihttp: MiHttpService) { }
 
-  TraerTodos():Promise<Array<ChoferService>>{
-    return  this.mihttp.TraerChoferes()
+  TraerTodos():Promise<Array<EncargadoService>>{
+    return  this.mihttp.TraerEncargados()
      .then( data => {
        //console.log( data );
        return data;
@@ -21,20 +21,8 @@ export class ChoferService {
      });
   }
 
-  TraerUno(usuario: string){
-    return  this.mihttp.TraerUnChofer(usuario)
-     .then( data => {
-       
-       return data;
-     })
-     .catch( err => {
-       console.log( err );
-       return null;
-     });
-  }
-
-  CrearUno(remisero: Remisero){
-    return this.mihttp.CrearRemisero(remisero)
+  ModificarUno(encargado : Remisero){
+    return this.mihttp.ModificarEncargado(encargado)
     .then(data => {
       return data;
     })
@@ -44,8 +32,9 @@ export class ChoferService {
     });
   }
 
-  ModificarUno(remisero: Remisero){
-    return this.mihttp.ModificarRemisero(remisero)
+
+  CrearUno(encargado: Remisero){
+    return this.mihttp.CrearEncargado(encargado)
     .then(data => {
       return data;
     })
@@ -54,5 +43,6 @@ export class ChoferService {
       return null;
     });
   }
+
   
 }

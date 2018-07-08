@@ -18,7 +18,7 @@ export class MiHttpService {
   headers: Headers;
   options: RequestOptions;
 
-  constructor( public http: Http ) {     
+  constructor( public http: Http) {     
     this.headers = new Headers({ 'Content-Type': 'application/json', 
     'Accept': 'q=0.8;application/json;q=0.9' });
     this.options = new RequestOptions({ headers: this.headers });   
@@ -48,11 +48,9 @@ export class MiHttpService {
       
       return this.http
         .post(this.url + '/Usuario/', data)
-          .subscribe(data => {
-              console.log(data);
-          }, error => {
-              console.log(error.json());
-          });
+          .toPromise()
+          .then(this.extraerDatos)
+          .catch(this.manejadorDeError);
     }
 
     traerLugar(url:string)
@@ -134,6 +132,14 @@ export class MiHttpService {
     TraerChoferes(){
       return this.http
       .get( this.url + '/Remiseros/')
+      .toPromise()
+      .then( this.extraerDatos )
+      .catch( this.manejadorDeError );
+    }
+
+    TraerEncargados(){
+      return this.http
+      .get( this.url + '/Encargados/')
       .toPromise()
       .then( this.extraerDatos )
       .catch( this.manejadorDeError );
@@ -222,15 +228,32 @@ export class MiHttpService {
     }
 
     CrearRemisero(remisero: Remisero){ 
-      let data = new URLSearchParams();
+      let data = new FormData();
       data.append('nombre', remisero.nombre);
       data.append('apellido',remisero.apellido);
       data.append('email',remisero.email);
       data.append('telefono',remisero.telefono.toString());
       data.append('estado',remisero.estado);
-      
+      data.append('foto',remisero.pathFoto,remisero.pathFoto.name);
+      console.log(data.get('nombre'));
       return this.http
         .post(this.url + '/Remisero/', data)
+        .toPromise()
+        .then( this.extraerDatos )
+        .catch( this.manejadorDeError );
+    }
+
+    CrearEncargado(encargado: Remisero){ 
+      let data = new URLSearchParams();
+      data.append('nombre', encargado.nombre);
+      data.append('apellido',encargado.apellido);
+      data.append('email',encargado.email);
+      data.append('telefono',encargado.telefono.toString());
+      data.append('estado',encargado.estado);
+      //data.append('foto',encargado.pathFoto,encargado.pathFoto.name);
+      //console.log(data.get('nombre'));
+      return this.http
+        .post(this.url + '/Encargado/', data)
         .toPromise()
         .then( this.extraerDatos )
         .catch( this.manejadorDeError );
@@ -241,7 +264,7 @@ export class MiHttpService {
       remisero.nombre != undefined ? data.append('nombre',remisero.nombre) : 1;
       remisero.apellido != undefined ? data.append('apellido',remisero.apellido) : 1;
       remisero.telefono != undefined ? data.append('telefono',remisero.telefono.toString()) : 1;
-      remisero.email != undefined ? data.append('email',remisero.email) : 1;
+      //remisero.email != undefined ? data.append('email',remisero.email) : 1;
       remisero.calificacion != undefined ? data.append('calificacion',remisero.calificacion.toString()) : 1;
 
       data.append('estado',remisero.estado);
@@ -255,6 +278,26 @@ export class MiHttpService {
         .catch( this.manejadorDeError );
     }
 
+    ModificarEncargado(encargado: Remisero){ 
+      let data = new URLSearchParams();
+      encargado.nombre != undefined ? data.append('nombre',encargado.nombre) : 1;
+      encargado.apellido != undefined ? data.append('apellido',encargado.apellido) : 1;
+      encargado.telefono != undefined ? data.append('telefono',encargado.telefono.toString()) : 1;
+      //remisero.email != undefined ? data.append('email',remisero.email) : 1;
+      
+
+      data.append('estado',encargado.estado);
+      data.append('id',encargado.id.toString());
+      //console.log(data);
+
+      return this.http
+        .post(this.url + '/Encargado/Modificar/', data)
+        .toPromise()
+        .then( this.extraerDatos )
+        .catch( this.manejadorDeError );
+    }
+
+    
     manejadorDeError(error:Response|any)
     { 
       return error;
@@ -265,4 +308,5 @@ export class MiHttpService {
           //console.log(respuesta);
           return respuesta.json()||{};
     }
+
 }

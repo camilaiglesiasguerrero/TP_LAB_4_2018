@@ -23,7 +23,7 @@ export class RoleGuardService implements CanActivate {
     if (!this.auth.isAuthenticated()){
       this.router.navigate(['/Error/SesionExpirada']);
     }
-    else if(tokenPayload.data.tipo !== expectedRole) {
+    else if(tokenPayload.data.tipo !== expectedRole && tokenPayload.data.tipo !== 'admin') {
       this.router.navigate(['/Error']);
       return false;
     }

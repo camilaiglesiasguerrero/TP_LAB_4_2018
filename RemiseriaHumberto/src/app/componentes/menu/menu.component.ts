@@ -13,6 +13,7 @@ export class MenuComponent implements OnInit {
   esEncargado : boolean = false;
   esRemisero : boolean = false;
   esCliente : boolean = false;
+  esAdmin : boolean = false;
 
   constructor(private route: ActivatedRoute, private router: Router) { 
     if(localStorage.getItem('usuario') == undefined){
@@ -28,21 +29,25 @@ export class MenuComponent implements OnInit {
         this.esCliente = true;
         this.esEncargado = false;
         this.esRemisero = false;
+        this.esAdmin = false;
       }
       else if(localStorage.getItem('tipo') == 'admin')
       {
+        this.esAdmin = true;
         this.esCliente = true;
         this.esEncargado = true;
         this.esRemisero = true;
       }
       else if(localStorage.getItem('tipo')=="encargado")
       {
+        this.esAdmin = false;
         this.esCliente = false;
         this.esEncargado = true;
         this.esRemisero = false;
       }
       else if(localStorage.getItem("tipo")=="remisero")
       {
+        this.esAdmin = false;
         this.esCliente = false;
         this.esEncargado = false;
         this.esRemisero = true;
@@ -99,6 +104,9 @@ export class MenuComponent implements OnInit {
         break;
       case 'Autos':
         this.router.navigate(['/Autos']);
+        break;
+      case 'Encargados':
+        this.router.navigate(['/Encargados']);
         break;
       case 'Remiseros':
         this.router.navigate(['/Remiseros']);

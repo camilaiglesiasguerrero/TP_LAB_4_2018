@@ -22,12 +22,17 @@ function copiaClave(input: FormControl) {
 })
 export class RegistroComponent implements OnInit {
 
-  constructor(private usuarioS : UsuarioService, private builder: FormBuilder) { 
+  constructor(private usuarioS : UsuarioService, private builder: FormBuilder, private route: ActivatedRoute,
+    private router: Router) { 
     this.tipo.setValue('cliente');
+    this.tiempo = 3;
   }
   nuevoUsuario : Usuario;
   elCaptcha : string = " ";
-  
+  repetidor:any;
+  tiempo:number;
+  seRegistro:boolean = false;
+
   resolved(captchaResponse: string) {
     this.captcha.setValue(captchaResponse);
     this.elCaptcha = captchaResponse; 
@@ -72,8 +77,36 @@ export class RegistroComponent implements OnInit {
     this.nuevoUsuario.email = this.registroForm.get('email').value;
     this.nuevoUsuario.clave = this.registroForm.get('clave').value;
     this.nuevoUsuario.tipo = this.registroForm.get('tipo').value;
-    //console.log(this.nuevoUsuario);
-    this.usuarioS.CrearUsuario(this.nuevoUsuario);
-    //console.log(this.registroForm.get('email').value); 
+  //console.log(this.nuevoUsuario);
+    clearInterval(this.repetidor);
+    this.repetidor = setInterval(()=>{ 
+      this.seRegistro = true;
+      this.tiempo--;
+      if(this.tiempo==0 ) {
+        clearInterval(this.repetidor);
+        this.Registro();
+        this.tiempo=3;
+      }
+      }, 900);     
+    }
+
+
+  Registro(){
+  this.seRegistro = false;
+  this.usuarioS.CrearUsuario(this.nuevoUsuario)
+    .then(data => {
+      var respuesta =  this.usuarioS.GenerarToken(this.nuevoUsuario.email,this.nuevoUsuario.clave,this.nuevoUsuario.tipo, token => { 
+        if(token!=undefined)
+        {
+          localStorage.setItem("token",token);
+          localStorage.setItem("usuario",this.nuevoUsuario.email);
+          localStorage.setItem("tipo",this.nuevoUsuario.tipo);
+          if(this.nuevoUsuario.tipo == 'cliente') 
+            this.router.navigate(['/Reserva']);
+        }
+      });
+    }).catch(e => {
+      console.log(e);
+    });   
   }
 }

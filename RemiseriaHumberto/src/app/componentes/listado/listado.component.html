@@ -1,8 +1,8 @@
 <ngb-alert *ngIf="dangerMessage" type="danger" (close)="dangerMessage = null">{{ dangerMessage }}</ngb-alert>
-
+<!--<button (click)="Exportar()">Exportar</button>-->
 
 <!--TABLA DE VIAJES GENERAL-->
-<table class="table table-condensed" style="table-layout:fixed" [hidden]='!sonViajes || asignar'> 
+<table class="table table-condensed" id=contentToConvert style="table-layout:fixed" [hidden]='!sonViajes || asignar'> 
     <thead>
         <tr>
             <th hidden>id</th>
@@ -30,11 +30,11 @@
             <td>{{item.duracion}}</td>
             <td>{{item.distancia}}</td>
             <td>{{item.tipoServicio | tipoV}}</td>
-            <td *ngIf='!finalizar'>{{item.valor | precio:1}}</td>
-            <td style='width: 15%;' *ngIf='finalizar'>
+            <td *ngIf='!finalizar || item.id !== elId'>{{item.valor | precio:1}}</td>
+            <td style='width: 15%;' *ngIf='finalizar && item.id === elId'>
                 <input type="number" style="width: 70%" [value]=valor [(ngModel)]=valor></td>
-            <td *ngIf=!finalizar >{{item.medioPago | medioP}}</td>
-            <td *ngIf=finalizar >
+            <td *ngIf='!finalizar || item.id !== elId' >{{item.medioPago | medioP}}</td>
+            <td *ngIf='finalizar && item.id === elId' >
                     <select style="font-size: 12px" id="medioP"  [(ngModel)]='medioP' class="form-control" >
                         <option value="eft"selected>Efectivo</option>
                         <option value="ctacte">Cuenta Corriente</option>
@@ -57,10 +57,15 @@
                     <button type="button" class="btn btn-default miBtn" popover="Ver ruta" triggers="mouseenter:mouseleave" (click)='VerMapa(item.id)' ><span  class="fa fa-eye"></span></button>
                 </div>
             </td>
-            <div *ngIf='item.deshabilitado' >
-                <td [hidden]='!esRemisero || !finalizar' ><button type="button" class="btn btn-success miBtn" popover="Dar por finalizado" triggers="mouseenter:mouseleave" (click)="Finalizar(item.id)" ><span  class="fa fa-check"></span></button></td>
-                <td [hidden]='!esRemisero || finalizar' ><button type="button" class="btn btn-warning miBtn" popover="Dar por finalizado" triggers="mouseenter:mouseleave" (click)="Preparar(item)" ><span  class="fa fa-check"></span></button></td>
-            </div>
+            <td [hidden]=!esRemisero>
+                <div *ngIf='!item.deshabilitado' >
+                    <td [hidden]='!esRemisero || !finalizar' ><button type="button" class="btn btn-success miBtn" popover="Dar por finalizado" triggers="mouseenter:mouseleave" (click)="Finalizar(item.id)" ><span  class="fa fa-check"></span></button></td>
+                    <td [hidden]='!esRemisero || finalizar' ><button type="button" class="btn btn-warning miBtn" popover="Dar por finalizado" triggers="mouseenter:mouseleave" (click)="Preparar(item)" ><span  class="fa fa-check"></span></button></td>
+                </div>
+                <div *ngIf='item.deshabilitado' >
+                    <td [hidden]='!esRemisero' ><button type="button" class="btn btn-warning miBtn" disabled triggers="mouseenter:mouseleave" ><span  class="fa fa-check"></span></button></td>
+                </div>
+            </td>
         </tr>  
   </tbody> 
 </table>
@@ -68,7 +73,7 @@
 
 
 <!--TABLA DE VIAJES PARA ASIGNAR-->
-<table class="table table-condensed" style="table-layout:fixed" [hidden]='!sonViajes || !asignar'> 
+<table id=contentToConvert class="table table-condensed" style="table-layout:fixed" [hidden]='!sonViajes || !asignar'> 
         <thead>
             <tr>
                 <th hidden>id</th>
@@ -89,20 +94,24 @@
                     <td>{{item.destino | direccion}}</td>        
                     <td>{{item.fecha | fecha}} {{item.hora | hora}}</td>        
                     <td>{{item.tipoServicio | tipoV}}</td>
-                    <td *ngIf=item.chofer>{{item.chofer}}</td>
-                    <td *ngIf=!item.chofer>
+                    <td *ngIf='item.chofer || listoAsignar || item.id !== elId'>{{item.chofer}}</td>
+                    <td *ngIf='!item.chofer && !listoAsignar && item.id === elId'>
                         <select [(ngModel)]='chofer' name="chofer"   >
                             <option *ngFor="let r of remiseros" value="{{r.apellido}}, {{r.nombre}}">{{r.nombre}} {{r.apellido}}</option>
                         </select>
                     </td>
-                    <td *ngIf=item.auto>{{item.auto}}</td>
-                    <td *ngIf=!item.auto>
+                    <td *ngIf='item.auto || listoAsignar || item.id !== elId'>{{item.auto}}</td>
+                    <td *ngIf='!item.auto && !listoAsignar && item.id === elId'>
                             <select [(ngModel)]='auto' name="auto"  >
                                 <option *ngFor="let a of autos" [hidden]='a.categoria !== item.tipoServicio' value="{{a.patente}}" >{{a.marca}} {{a.modelo}} {{a.patente}}</option>
                             </select>
                         </td>
                         <td>{{item.estado}}</td>
-                        <td><button type="button" class="btn btn-warning miBtn" popover="Asignar viaje" triggers="mouseenter:mouseleave" (click)="Asignar(item.id, item.fecha, item.hora)" ><span  class="fa fa-check"></span></button></td>
+                        <td >
+                            <button [hidden]='!listoAsignar && item.id === elId' type="button" class="btn btn-warning miBtn" popover="Asignar viaje" triggers="mouseenter:mouseleave" (click)="PrepararAsignacion(item.id, item.fecha, item.hora)" ><span  class="fa fa-check"></span></button>
+                            <button [hidden]='listoAsignar || item.id !== elId' type="button" class="btn btn-success miBtn" popover="Confirmar asignación" triggers="mouseenter:mouseleave" (click)="Asignar(item.id, item.fecha, item.hora)" ><span  class="fa fa-check"></span></button>
+                        </td>
+                        
                 </tr>  
           </tbody> 
         </table>
@@ -185,3 +194,36 @@
       </tbody> 
     </table>
 
+<!--TABLA DE ENCARGADOS-->
+<table class="table table-condensed" style="table-layout:fixed" [hidden]='!sonEncargados'> 
+    <thead>
+        <tr>
+            <th hidden>id</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+      </thead>
+      <tbody>
+            <tr *ngFor="let item of listado"> 
+                <td hidden>{{item.id}}</td>        
+                <td *ngIf='!habilitaEdicion || (item.id !== elId)'>{{item.nombre}}</td>        
+                <td *ngIf='habilitaEdicion  && (item.id === elId)'><input type="text" [(ngModel)]=nombre [value]='nombre'></td>        
+                <td *ngIf='!habilitaEdicion || (item.id !== elId)' >{{item.apellido}}</td>        
+                <td *ngIf='habilitaEdicion  && (item.id === elId)'><input type="text" [(ngModel)]=apellido [value]='apellido'></td>        
+                <td >{{item.email}}</td>
+                <td *ngIf='!habilitaEdicion || (item.id !== elId)'>{{item.telefono}}</td>
+                <td *ngIf='habilitaEdicion  && (item.id === elId)'><input type="number" [(ngModel)]=telefono [value]='telefono'></td>        
+                <td>{{item.estado}}</td>
+                <td>
+                    <button *ngIf='!habilitaEdicion || (item.id !== elId)' type="button" class="btn btn-warning miBtn" popover="Editar encargado" triggers="mouseenter:mouseleave" (click)="EditFrm(item)" ><span  class="fa fa-pencil"></span></button>
+                    <button *ngIf='habilitaEdicion  && (item.id === elId)' type="button" class="btn btn-success miBtn" popover="Editar encargado" triggers="mouseenter:mouseleave" (click)="Guardar(item)" ><span  class="fa fa-check"></span></button>
+                    <button *ngIf="item.estado === 'Activo'" type="button" class="btn btn-danger miBtn" popover="Inhabilitar encargado" triggers="mouseenter:mouseleave" (click)="Inhabilitar(item.id, item.estado)" ><span  class="fa fa-times"></span></button>
+                    <button *ngIf="item.estado !== 'Activo'" type="button" class="btn btn-success miBtn" popover="Rehabilitar encargado" triggers="mouseenter:mouseleave" (click)="Inhabilitar(item.id, item.estado)" ><span  class="fa fa-check"></span></button>
+                </td>
+            </tr>  
+      </tbody> 
+    </table>

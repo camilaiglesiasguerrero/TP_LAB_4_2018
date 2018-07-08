@@ -58,7 +58,7 @@ export class ViajeService {
   Asignar(chofer: string, auto:string, id:number,fecha: string, hora: string){
     var unViaje: Viaje = new Viaje();
     unViaje.patente = auto;
-    unViaje.remisero = (chofer.split(',')[1] + ' ' + chofer.split(',')[0]).trimRight();
+    unViaje.remisero = (chofer.split(',')[1] + ' ' + chofer.split(',')[0]).trimLeft();
     unViaje.id = id;
     unViaje.estado = 'Asignado';
     unViaje.fecha = fecha;

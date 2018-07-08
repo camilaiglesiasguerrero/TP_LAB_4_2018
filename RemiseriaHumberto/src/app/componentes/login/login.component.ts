@@ -1,10 +1,10 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { Usuario } from '../../clases/usuario';
 import { UsuarioService } from '../../servicios/usuario.service';
-import { Subject } from 'rxjs';
+import { Subject, observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import {Observable} from 'rxjs-compat';
 
 @Component({
   selector: 'app-login',
@@ -19,11 +19,15 @@ export class LoginComponent implements OnInit {
   dangerMessage: string;
   esCliente: boolean;
   tipo: string;
+  seLogueo: boolean = false;
+  repetidor : any; 
+  tiempo: number;
 
   constructor(private usuarioS : UsuarioService, private route: ActivatedRoute,
     private router: Router) { 
     this.usuario = new Usuario();
     this.tipo = 'cliente';
+    this.tiempo = 3;
   }
 
   mensaje : string;
@@ -84,13 +88,30 @@ export class LoginComponent implements OnInit {
       }
       else
       {
-        try{
+        clearInterval(this.repetidor);
+        this.repetidor = setInterval(()=>{ 
+          this.seLogueo = true;
+          this.tiempo--;
+          if(this.tiempo==0 ) {
+            clearInterval(this.repetidor);
+            this.Logueo();
+            this.tiempo=3;
+          }
+          }, 900);     
+          
+    }
+  }
+
+  Logueo(){   
+    this.seLogueo = false;
+      try{
         this.usuario.tipo = this.tipo;
         var respuesta =  this.usuarioS.GenerarToken(this.usuario.email,this.usuario.clave,this.usuario.tipo, token => { 
           if(token!=undefined)
           {
             localStorage.setItem("token",token);
             localStorage.setItem("usuario",this.usuario.email);
+            localStorage.setItem("tipo",this.usuario.tipo);
             if(this.usuario.tipo == 'cliente') 
               this.router.navigate(['/Reserva']);
             else if(this.usuario.tipo == 'admin')
@@ -101,10 +122,10 @@ export class LoginComponent implements OnInit {
           else{
             this._danger.next("No se pudo ingresar, vuelva a intentar");
           }
+
       });
     }catch(error){ 
       this._danger.next(error + "No se pudo ingresar, vuelva a intentar");
     }
-  }
   }
 }

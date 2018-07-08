@@ -6,6 +6,8 @@ import { AutoService } from '../../servicios/auto.service';
 import { ChoferService } from '../../servicios/chofer.service';
 import { Remisero } from '../../clases/remisero';
 import { Auto } from '../../clases/auto';
+import { EncargadoService } from '../../servicios/encargado.service';
+
 
 @Component({
   selector: 'app-frm-alta',
@@ -23,6 +25,7 @@ export class FrmAltaComponent implements OnInit {
   agregar:boolean;
   sonRemiseros:boolean;
   sonAutos:boolean;
+  sonEncargados:boolean;
   listado : Array<any>;
 
   nombre:string;
@@ -36,7 +39,7 @@ export class FrmAltaComponent implements OnInit {
   patente: string;
 
   constructor(private route: ActivatedRoute, private router: Router, 
-    private autoS : AutoService, private remiseroS : ChoferService) { }
+    private autoS : AutoService, private remiseroS : ChoferService, private encargadoS : EncargadoService) { }
 
   ngOnInit() {
     this.agregar = false;
@@ -44,6 +47,7 @@ export class FrmAltaComponent implements OnInit {
       if(this.router.url == '/Autos'){  
         this.sonAutos = true;
         this.sonRemiseros = false;
+        this.sonEncargados = false;
         this.categoria = 'std';
         this.autoS.TraerTodos()
         .then(datos=>{
@@ -55,8 +59,20 @@ export class FrmAltaComponent implements OnInit {
       else if(this.router.url == '/Remiseros'){
         this.sonAutos = false;
         this.sonRemiseros = true;
-        
+        this.sonEncargados = false;
         this.remiseroS.TraerTodos()
+        .then(datos=>{
+          this.listado = datos;
+        }).catch(e => {
+          this._danger.next(e);
+        });
+      }
+      else if(this.router.url == '/Encargados'){
+        this.sonAutos = false;
+        this.sonRemiseros = false;
+        this.sonEncargados = true;
+        
+        this.encargadoS.TraerTodos()
         .then(datos=>{
           this.listado = datos;
         }).catch(e => {
@@ -94,9 +110,10 @@ export class FrmAltaComponent implements OnInit {
         remisero.email = this.email;
         remisero.telefono = this.telefono;
         remisero.estado = "Activo";
-
+        remisero.pathFoto = this.selectedFile;
         this.remiseroS.CrearUno(remisero)
         .then(data =>{
+          console.log(data);
           this.listado.push(remisero);
           this._success.next("Se creó el usuario para " + this.nombre + ' ' + this.apellido + '. Debe ingresar con su email, la clave es 123456, para cambiarla debe dirigirse a Mi Perfil');
         })
@@ -126,7 +143,34 @@ export class FrmAltaComponent implements OnInit {
         });
       }else
         this._danger.next("Debés completar todos los campos.");
+    }else if(this.sonEncargados){
+      if(this.nombre != '' && this.apellido != '' && this.email != '' && this.telefono != null
+    && this.nombre != undefined && this.apellido != undefined && this.email != undefined){
+        let encargado = new Remisero();
+        encargado.nombre = this.nombre;
+        encargado.apellido = this.apellido;
+        encargado.email = this.email;
+        encargado.telefono = this.telefono;
+        encargado.estado = "Activo";
+        this.encargadoS.CrearUno(encargado)
+        .then(data =>{
+          console.log(data);
+          this.listado.push(encargado);
+          this._success.next("Se creó el usuario para " + this.nombre + ' ' + this.apellido + '. Debe ingresar con su email, la clave es 123456, para cambiarla debe dirigirse a Mi Perfil');
+        })
+        .catch(e => {
+          this._danger.next(e);
+        });
+      }
+      else  
+        this._danger.next("Debés completar todos los campos.");
     }
+  }
+
+  selectedFile : File = null;
+
+  onFileSelected(event){
+    this.selectedFile = <File>event.target.files[0];
   }
 
 }

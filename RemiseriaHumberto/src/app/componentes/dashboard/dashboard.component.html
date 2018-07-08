@@ -1,8 +1,21 @@
 <app-menu></app-menu>
 
-  
-    <app-tipo-serv ></app-tipo-serv>
-
-    <app-viajes ></app-viajes>
-    
+<table class="table table-condensed" style="table-layout:fixed" > 
+    <thead>
+<!--        <tr>
+            <th></th>
+            <th></th>
+        </tr>-->
+      </thead>
+      <tbody>
+            <tr> 
+                <td> <strong> VIAJES POR TIPO DE SERVICIO</strong> <br> <app-tipo-serv></app-tipo-serv></td>        
+                <td> <strong>CANTIDAD DE VIAJES POR CHOFER</strong> <br> <app-viajes></app-viajes> </td>        
+            </tr>  
+            <tr> 
+                <td> <strong>TOP 5 DE CHOFERES MEJORES CALIFICADOS</strong> <br> <app-calificacion></app-calificacion></td>        
+                <td> <app-viajes></app-viajes> </td>        
+            </tr> 
+      </tbody> 
+    </table>
     <app-tabla></app-tabla>

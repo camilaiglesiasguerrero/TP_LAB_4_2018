@@ -17,13 +17,13 @@
       <input type="password" placeholder="Repita su clave"  [formControl]="copiaClave" name="psw-repeat" required>
       <br>
       <br>
-      <label><b>Tipo de usuario</b></label>
+      <!--<label><b>Tipo de usuario</b></label>
       <select [formControl]="tipo" name="Tipo" id="tipo">
         <option value="admin">Encargado</option>
         <option value="remisero">Remisero</option>
         <option value="cliente">Cliente</option>
-      </select> 
-      <input [formControl]="captcha" name="captcha" required>
+      </select> -->
+      <input hidden [formControl]="captcha" name="captcha" required>
       <div style="margin-left: 35%;">
         <div style=" margin-top: 2%; margin-bottom: 2%">
             <re-captcha (resolved)="resolved($event)" siteKey="6LfEKF4UAAAAAFY9SD3LQATL7j4Hak-pANt5_STg"></re-captcha>
@@ -32,7 +32,8 @@
           
     </div>
        <div>
-        <button type="submit" class="btn btn-success" [disabled]="!registroForm.valid">Registrarme</button>
+        <button type="submit" [hidden]=seRegistro class="btn btn-success" [disabled]="!registroForm.valid">Registrarme</button>
+        <p-progressSpinner [hidden]=!seRegistro  [style]="{width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
       </div>
     </div>
   </form>

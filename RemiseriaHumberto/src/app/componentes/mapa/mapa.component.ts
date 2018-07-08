@@ -1,11 +1,12 @@
 import { Component, ElementRef, NgModule, NgZone, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
-import { MapsAPILoader } from '@agm/core';
+import { MapsAPILoader, GoogleMapsAPIWrapper } from '@agm/core';
 import { MiHttpService } from  '../../servicios/mi-http.service';
 import { Router } from '@angular/router';
 /// <reference path="<relevant path>/node_modules/@types/googlemaps/index.d.ts" />
 import {} from '@types/googlemaps';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+
 
 
 @Component({
@@ -48,18 +49,21 @@ export class MapaComponent implements OnInit {
   elMensaje:string;
   public latitude: number;
   public longitude: number;
-
+  public provideRouteAlternatives:boolean;
   public origin: {} = {
     lat: 0,
     lng: 0
   }
   public destination: {} = {
-    lat:0,
-    lng:0
+    lat: 0,
+    lng: 0
   }
+  public waypoints: object [];
+  public travelMode;
 
   constructor(private MihttpServ:MiHttpService,private router: Router,
     private mapsAPILoader: MapsAPILoader, private ngZone: NgZone) { 
+  
     this.zoom = 15;
     localStorage.setItem("Origen","");
     localStorage.setItem("OrigenLat","");
@@ -201,12 +205,13 @@ export class MapaComponent implements OnInit {
   }
 
   conDirec(){
+    this.provideRouteAlternatives = true;
     //bloqueada 30-06 
     var key = "&key=AIzaSyCin-h5KlbULoPjugwtWhGFo48GlDxD1Fc";
     //var key = "&key=AIzaSyBmFOMZzSLViDvP44lp-yD9kwa-G_IuCdM";
     
     var url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-
+    
     //SACO LAT Y LONG ORIGEN
     this.MihttpServ.traerLugar(url+this.ori+key)
     .then(
@@ -231,35 +236,39 @@ export class MapaComponent implements OnInit {
               lat: data.results[0].geometry.location.lat,
               lng: data.results[0].geometry.location.lng
             }
-
+            
+            this.enviarAlForm();
              //SACO DISTANCIAS Y TIEMPOS
              //url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins='+localStorage.getItem("Origen")+'&destinations='+localStorage.getItem("Destino")+key;
              url = 'https://maps.googleapis.com/maps/api/directions/json?origin='+localStorage.getItem("Origen")+'&destination='+localStorage.getItem("Destino")+'&alternatives=true'+key;
-             //console.log(url);
+             
+            
              this.MihttpServ.traerLugar(url)
              .then(
+              
                data => {  
+                //console.log(data);
                 this.elMensaje = "Existen " + data.routes.length + ' rutas para llegar a destino. Seleccione la de preferencia: ' 
                 this.misDirecciones = data.routes;
+                  
+                        
                 
-                  
-                  
                   localStorage.setItem('viajeOpcion',data.routes[0].summary);
-                  localStorage.setItem('duracion',data.routes[0].legs[0].duration['text']);
-                  localStorage.setItem('distancia',data.routes[0].legs[0].distancia['text']);              
+                  //localStorage.setItem('duracion',data.routes[0].legs[0].duration['text']);
+                  //localStorage.setItem('distancia',data.routes[0].legs[0].distancia['text']);              
                   
-                this.enviarAlForm();
+                
                })
              .catch(e=>{
-               this._danger.next("No se pudo calcular distancia y tiempo viaje.");
+               this._danger.next(e + "No se pudo calcular distancia y tiempo viaje.");
             }); 
           })
         .catch(e=>{
-          this._danger.next("Por favor verifique origen y/o destino de viaje.");
+          this._danger.next("Por favor verifique destino de viaje.");
         });
       })
     .catch(e=>{
-      this._danger.next("Por favor verifique origen y/o destino de viaje.");
+      this._danger.next("Por favor verifique origen de viaje.");
     });
   }
 
@@ -271,7 +280,7 @@ export class MapaComponent implements OnInit {
     localStorage.setItem('viajeOpcion',summary);
     localStorage.setItem('duracion',duracion);
     localStorage.setItem('distancia',distancia);
-
+    
   }
   
 }

@@ -16,7 +16,8 @@
         <option value="remisero">Remisero</option>
         <option value="cliente" selected>Cliente</option>
     </select> 
-    <br><br><button type="button" class="btn btn-success"  (click)="Entrar()" >Ingresar</button> 
+    <br><br><button [hidden]=seLogueo type="button" class="btn btn-success"  (click)="Entrar()" >Ingresar</button> 
+    <p-progressSpinner [hidden]=!seLogueo  [style]="{width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
   </form>
   <br><br>
   <strong>Ingresar como:</strong>

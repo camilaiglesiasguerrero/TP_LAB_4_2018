@@ -1,0 +1,14 @@
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Calificacion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let c of choferes">
+      <td>{{c.nombre}} {{c.apellido}}</td>
+      <td style="font-family: stars">{{c.calificacion | estrellas }}</td>
+    </tr>
+  </tbody>
+</table>

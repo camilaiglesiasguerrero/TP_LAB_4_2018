@@ -1,5 +1,6 @@
 <h3 class="first">Basic</h3>
-<p-table [value]="cars">
+<button (click)="Exportar()">Exportar</button>
+<p-table [value]="cars" id=contentToConvert>
     <ng-template pTemplate="header">
         <tr>
             <th>Origen</th>
@@ -8,7 +9,7 @@
             <th>Auto</th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-car>
+    <ng-template pTemplate="body" let-car >
         <tr>
             <td>{{car.origen}}</td>
             <td>{{car.destino}}</td>

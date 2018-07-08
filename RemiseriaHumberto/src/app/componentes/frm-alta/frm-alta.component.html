@@ -7,7 +7,7 @@
 </div>
 
 <div class="container" style="text-align:center; margin-top:3%" [hidden]=!agregar>
-  <form [hidden]=!sonRemiseros>
+  <form [hidden]='!sonRemiseros'>
     <div class="container">
           <strong>NUEVO REMISERO</strong>
       <br><br>
@@ -21,6 +21,9 @@
       <br>
       <br>
       <input type="number" placeholder="Teléfono" name="telefono" [(ngModel)]="telefono" required>
+
+      <input type="file" (change)="onFileSelected($event)">
+
       <div style="margin-top: 3%">
         <button type="submit" class="btn btn-success" (click)="Guardar()" >Guardar</button>
       </div>
@@ -57,7 +60,28 @@
     </form>
 </div>                  
 
+<!--ENCARGADOS-->
+<div class="container" style="text-align:center; margin-top:3%" [hidden]=!agregar>
+  <form [hidden]='!sonEncargados'>
+    <div class="container">
+          <strong>NUEVO ENCARGADO</strong>
+      <br><br>
+      <input type="text" placeholder="Nombre" name="nombre" [(ngModel)]="nombre" required>
+      <br>
+      <br>
+      <input type="text" placeholder="Apellido" name="apellido"  [(ngModel)]="apellido" required>
+      <br>
+      <br>
+      <input type="email" placeholder="Email" name="email" [(ngModel)]="email" required>
+      <br>
+      <br>
+      <input type="number" placeholder="Teléfono" name="telefono" [(ngModel)]="telefono" required>
 
+      <div style="margin-top: 3%">
+        <button type="submit" class="btn btn-success" (click)="Guardar()" >Guardar</button>
+      </div>
+    </div>
+  </form>
+</div>
 
-
-<app-listado [listado]=listado [sonAutos]=sonAutos [sonRemiseros]=sonRemiseros ></app-listado>
+<app-listado [listado]=listado [sonAutos]=sonAutos [sonRemiseros]=sonRemiseros [sonEncargados]=sonEncargados ></app-listado>

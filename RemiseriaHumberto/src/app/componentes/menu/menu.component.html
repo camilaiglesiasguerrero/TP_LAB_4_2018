@@ -51,6 +51,11 @@
       </li>
       <li class="divider-vertical" [hidden]='!esEncargado'></li>
       
+      <li class="nav-item active"[hidden]='!esAdmin' >
+        <a class="nav-link"   (click)="irA('Encargados')" class='a'><span class="fa fa-user"></span> Encargados</a>
+      </li>
+      <li class="divider-vertical" [hidden]='!esAdmin'></li>
+      
       
 
       <li class="nav-item active" [hidden]='estaLogueado' >

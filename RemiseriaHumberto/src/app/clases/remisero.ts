@@ -4,7 +4,7 @@ export class Remisero {
     apellido:string;
     calificacion: number;
     estado: string;
-    pathFoto: string;
+    pathFoto: File;
     email: string;
     telefono: number;
 

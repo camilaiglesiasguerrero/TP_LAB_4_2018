@@ -12,6 +12,8 @@ export class TipoServComponent implements OnInit {
   data: any;
 
   std:number = 0;
+  ej:number=0;
+  sedan:number=0;
   flete:number = 0;
   transfer:number = 0;
 
@@ -20,28 +22,44 @@ export class TipoServComponent implements OnInit {
       this.viajeS.TraerTodos().then(datos=>{
           aux = datos;
           for (let index = 0; index < aux.length; index++) {
-            console.log(aux[index].tipoServicio);
+            //console.log(aux[index].tipoServicio);
             switch(aux[index].tipoServicio){
               case "std":
                 this.std++;
+                break;
+              case "ej":
+                this.ej++;
+                break;
+              case "sedan":
+                this.sedan++;
+                break;
+              case "flete":
+                this.flete++;
+                break;
+              case "transfer":
+                this.transfer++;
                 break;
             }
           }
 
           this.data = {
-            labels: ['Standard','Flete','Transfer'],
+            labels: ['Standard','Ejecutivo','Sedán','Flete','Transfer'],
             datasets: [
                 {
-                    data: [this.std, this.flete, this.transfer],
+                    data: [this.std, this.ej, this.sedan, this.flete, this.transfer],
                     backgroundColor: [
                         "#FF6384",
                         "#36A2EB",
-                        "#FFCE56"
+                        "#FFCE56",
+                        "#77FC3D",
+                        "#AC6DF7"
                     ],
                     hoverBackgroundColor: [
                         "#FF6384",
                         "#36A2EB",
-                        "#FFCE56"
+                        "#FFCE56",
+                        '#77FC3D',
+                        "#AC6DF7"
                     ]
                 }]    
             };

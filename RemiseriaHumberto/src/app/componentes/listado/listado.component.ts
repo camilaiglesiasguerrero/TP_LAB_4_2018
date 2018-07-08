@@ -8,7 +8,9 @@ import { ViajeService } from '../../servicios/viaje.service';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Auto } from '../../clases/auto';
-
+import * as jspdf from 'jspdf';  
+import html2canvas from 'html2canvas'; 
+import { EncargadoService } from '../../servicios/encargado.service';
 
 @Component({
   selector: 'app-listado',
@@ -24,8 +26,10 @@ export class ListadoComponent implements OnInit {
   @Input() sonViajes: boolean;
   @Input() sonAutos: boolean;
   @Input() sonRemiseros: boolean;
+  @Input() sonEncargados: boolean;
   @Input() listado: Array<any>;
 
+  listoAsignar:boolean = true;
   aAsignar : boolean;
   viajeEditar: boolean;
   cual : any;
@@ -58,7 +62,7 @@ export class ListadoComponent implements OnInit {
   medioP : string;
 
   constructor(private route: ActivatedRoute, private router: Router, 
-    private choferS : ChoferService, private autoS : AutoService, private viajeS: ViajeService) {
+    private choferS : ChoferService, private autoS : AutoService, private viajeS: ViajeService, private encargadoS:EncargadoService) {
     switch(localStorage.getItem("tipo")){
       case "cliente":
         this.esCliente = true;
@@ -162,6 +166,18 @@ export class ListadoComponent implements OnInit {
       this.autoM.marca = item.marca;
       this.autoM.modelo = item.modelo;
       this.autoM.patente = item.patente;
+    }else if(this.sonEncargados){
+      this.elId = item.id;
+      this.nombre = item.nombre;
+      this.apellido = item.apellido;
+      this.telefono = item.telefono;
+      this.email = item.email;
+      this.remiseroM = new Remisero();
+      this.remiseroM.id = this.elId;
+      this.remiseroM.nombre =  this.nombre;
+      this.remiseroM.apellido =  this.apellido;
+      this.remiseroM.telefono =  this.telefono;
+      this.remiseroM.email = this.email;
     }
   }
 
@@ -189,6 +205,7 @@ export class ListadoComponent implements OnInit {
       .catch(e =>{
         this._danger.next(e);
       });
+
     }else if(this.sonRemiseros){
       let elRemisero = new Remisero();
       elRemisero.id = this.elId;
@@ -211,14 +228,37 @@ export class ListadoComponent implements OnInit {
       .catch(e =>{
         this._danger.next(e);
       });
-    }
+
+    }else if(this.sonEncargados){
+      let elRemisero = new Remisero();
+      elRemisero.id = this.elId;
+      this.nombre == '' ? elRemisero.nombre = this.remiseroM.nombre : elRemisero.nombre = this.nombre;
+      this.apellido == '' ? elRemisero.apellido = this.remiseroM.apellido :elRemisero.apellido = this.apellido;
+      this.telefono == null ? elRemisero.telefono = this.remiseroM.telefono :elRemisero.telefono = this.telefono;
+      
+      this.encargadoS.ModificarUno(elRemisero)
+      .then(data => {
+        for (let index = 0; index < this.listado.length; index++) {
+          if(this.listado[index].id == this.elId){
+            this.listado[index].nombre = elRemisero.nombre;
+            this.listado[index].apellido = elRemisero.apellido;
+            this.listado[index].telefono = elRemisero.telefono;
+          }
+        }
+        this.habilitaEdicion = false;
+      })
+      .catch(e =>{
+        this._danger.next(e);
+      });
   }
+}
 
   Preparar(item:any){
-    console.log(item);
+    //console.log(item);
     this.finalizar = true;
     this.valor = item.valor;
     this.medioP = item.medioPago;
+    this.elId = item.id;
   }
 
   Finalizar(id:number){
@@ -227,11 +267,13 @@ export class ListadoComponent implements OnInit {
     unViaje.estado = "Finalizado";
     unViaje.medioPago = this.medioP;
     unViaje.valor = this.valor;
+    this.finalizar =false;
 
     this.viajeS.modificarViaje(unViaje)
       .then(dato => {
         this.viajeS.TraerTodos()
           .then(datos=>{
+            this.listado = datos;
             this.choferS.TraerUno(localStorage.getItem("usuario"))
             .then(data => {
               var nombre = data.nombre + ' ' + data.apellido;
@@ -240,8 +282,9 @@ export class ListadoComponent implements OnInit {
                 if(this.listado[index].estado == 'Finalizado' )
                   this.listado[index].deshabilitado = true;
               }
+              
             })
-            this.ngOnInit();
+            //this.ngOnInit();
             })
             .catch(error => {this._danger.next(error)
             });     
@@ -299,7 +342,8 @@ export class ListadoComponent implements OnInit {
         .catch(e => {
           this._danger.next(e);
         })
-      })
+      });
+   
     }else if(this.sonRemiseros){
       let remisero = new Remisero();
       remisero.id = id;
@@ -312,14 +356,34 @@ export class ListadoComponent implements OnInit {
         })
         .catch(e => {
           this._danger.next(e);
-        })
+        });
       })
-
+    }else if(this.sonEncargados){
+      let encargado = new Remisero();
+      encargado.id = id;
+      encargado.estado = newEstado;
+      this.encargadoS.ModificarUno(encargado)
+      .then(data => {
+        this.encargadoS.TraerTodos()
+        .then(datos =>{
+          this.listado = datos;
+        })
+        .catch(e => {
+          this._danger.next(e);
+        });
+      })
     }
+  }
 
+  PrepararAsignacion(id:number, fecha: string, hora:string){
+    this.aAsignar = true;
+    this.listoAsignar = false;
+    this.elId = id;
+  
   }
 
     Asignar(id:number, fecha: string, hora:string){
+      this.listoAsignar =true;
       this.aAsignar = true;
       if(this.chofer != ', No hay disponibles' && this.auto != undefined && this.chofer != undefined){
         this.viajeS.Asignar(this.chofer, this.auto, id, fecha, hora)
@@ -341,6 +405,25 @@ export class ListadoComponent implements OnInit {
         this._danger.next("No se puede asignar. Revise por favor.");
       }
     }
+
+    public Exportar()  
+  {  
+    var data = document.getElementById('contentToConvert');  
+    html2canvas(data).then(canvas => {  
+      // Few necessary setting options  
+      var imgWidth = 208;   
+      var pageHeight = 295;    
+      var imgHeight = canvas.height * imgWidth / canvas.width;  
+      var heightLeft = imgHeight;  
+  
+      const contentDataURL = canvas.toDataURL('image/png')  
+      let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
+      var position = 15;  
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)  
+      pdf.save('Viajes.pdf'); // Generated PDF   
+    });  
+  }  
+
   }
 
   

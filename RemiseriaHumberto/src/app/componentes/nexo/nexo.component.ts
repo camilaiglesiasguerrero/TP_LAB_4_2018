@@ -62,6 +62,7 @@ export class NexoComponent implements OnInit {
                 this.listado[index].deshabilitado = true;
               }
             }
+            console.log(this.listado);
           }
 
           //LISTADO PARA EL REMISERO
@@ -71,7 +72,14 @@ export class NexoComponent implements OnInit {
             .then(data => {
               var nombre = data.nombre + ' ' + data.apellido;
               this.listado = this.listado.filter(datos=> datos.chofer === nombre);
-              //console.log(this.listado);
+              for (let index = 0; index < this.listado.length; index++) {
+                if(this.listado[index].estado == "Nuevo" || this.listado[index].estado == "Modificado" || this.listado[index].estado == "Asignado" ){
+                  this.listado[index].deshabilitado = false;
+                }
+                else{
+                  this.listado[index].deshabilitado = true;
+                }
+              }
             })
             
           }
