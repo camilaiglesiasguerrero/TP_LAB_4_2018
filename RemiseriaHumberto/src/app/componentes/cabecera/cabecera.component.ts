@@ -11,5 +11,4 @@ export class CabeceraComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

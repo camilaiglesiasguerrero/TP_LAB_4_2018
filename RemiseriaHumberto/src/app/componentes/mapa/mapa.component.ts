@@ -91,7 +91,7 @@ export class MapaComponent implements OnInit {
         autocomplete.addListener("place_changed", () => {
           this.ngZone.run(() => {
             let place : google.maps.places.PlaceResult = autocomplete.getPlace();      
-            
+            this.ori = place.formatted_address; 
             //this.conDirec(place.formatted_address);
             
             if(place.geometry === undefined || place.geometry === null){
@@ -111,7 +111,7 @@ export class MapaComponent implements OnInit {
         autocomplete.addListener("place_changed", () => {
           this.ngZone.run(() => {
             let place : google.maps.places.PlaceResult = autocomplete.getPlace();      
-            
+            this.dest = place.formatted_address;
             //this.conDirec(place.formatted_address);
             
             if(place.geometry === undefined || place.geometry === null){
@@ -132,7 +132,7 @@ export class MapaComponent implements OnInit {
         autocomplete.addListener("place_changed", () => {
           this.ngZone.run(() => {
             let place : google.maps.places.PlaceResult = autocomplete.getPlace();      
-            
+            this.ori = place.formatted_address;
             //this.conDirec(place.formatted_address);
             
             if(place.geometry === undefined || place.geometry === null){
@@ -152,7 +152,7 @@ export class MapaComponent implements OnInit {
         autocomplete.addListener("place_changed", () => {
           this.ngZone.run(() => {
             let place : google.maps.places.PlaceResult = autocomplete.getPlace();      
-            
+            this.dest = place.formatted_address;
             //this.conDirec(place.formatted_address);
             
             if(place.geometry === undefined || place.geometry === null){
@@ -205,15 +205,10 @@ export class MapaComponent implements OnInit {
   }
 
   conDirec(){
-<<<<<<< HEAD
     this.provideRouteAlternatives = true;
     //bloqueada 30-06 
     var key = "&key=AIzaSyCin-h5KlbULoPjugwtWhGFo48GlDxD1Fc";
     //var key = "&key=AIzaSyBmFOMZzSLViDvP44lp-yD9kwa-G_IuCdM";
-=======
-    
-    var key = **************;
->>>>>>> 3ccee82e23d7509aa54997628459cd3539f97b7b
     
     var url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
     
@@ -242,30 +237,31 @@ export class MapaComponent implements OnInit {
               lng: data.results[0].geometry.location.lng
             }
             
-            this.enviarAlForm();
+            this.enviarAlForm();    
              //SACO DISTANCIAS Y TIEMPOS
-             //url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins='+localStorage.getItem("Origen")+'&destinations='+localStorage.getItem("Destino")+key;
-             url = 'https://maps.googleapis.com/maps/api/directions/json?origin='+localStorage.getItem("Origen")+'&destination='+localStorage.getItem("Destino")+'&alternatives=true'+key;
-             
-            
+             url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins='+localStorage.getItem("Origen")+'&destinations='+localStorage.getItem("Destino")+key;
+             //url = 'https://maps.googleapis.com/maps/api/directions/json?origin='+localStorage.getItem("Origen")+'&destination='+localStorage.getItem("Destino")+'&alternatives=true'+key;
+            //console.log(url);
              this.MihttpServ.traerLugar(url)
              .then(
-              
                data => {  
-                //console.log(data);
-                this.elMensaje = "Existen " + data.routes.length + ' rutas para llegar a destino. Seleccione la de preferencia: ' 
-                this.misDirecciones = data.routes;
-                  
-                        
-                
-                  localStorage.setItem('viajeOpcion',data.routes[0].summary);
-                  //localStorage.setItem('duracion',data.routes[0].legs[0].duration['text']);
-                  //localStorage.setItem('distancia',data.routes[0].legs[0].distancia['text']);              
-                  
+                  this.distancia = "La distancia es " + data.rows[0].elements[0].distance.text;
+                  this.duracion = " y la duración aproximada de viaje " + data.rows[0].elements[0].duration.text;
+                  this.laDistanciaMts = data.rows[0].elements[0].distance.value;
+                  localStorage.setItem("Duracion",data.rows[0].elements[0].duration.text);
+                  localStorage.setItem("Distancia",data.rows[0].elements[0].distance.text);
+                  localStorage.setItem("DistanciaMts",data.rows[0].elements[0].duration.value);
+                      /*PARA EL DIRECTIONS - DIRECCIONES MULTIPLES - NO FUNCIONA LA OPCION DEL MAPA */
+                //this.elMensaje = "Existen " + data.routes.length + ' rutas para llegar a destino. Seleccione la de preferencia: ' 
+                //this.misDirecciones = data.routes;
+                //localStorage.setItem('viajeOpcion',data.routes[0].summary);
+                //localStorage.setItem('duracion',data.routes[0].legs[0].duration['text']);
+                //localStorage.setItem('distancia',data.routes[0].legs[0].distancia['text']);              
+                //this.distancia = data.    
                 
                })
              .catch(e=>{
-               this._danger.next(e + "No se pudo calcular distancia y tiempo viaje.");
+               //this._danger.next(e + "No se pudo calcular distancia y tiempo viaje.");
             }); 
           })
         .catch(e=>{

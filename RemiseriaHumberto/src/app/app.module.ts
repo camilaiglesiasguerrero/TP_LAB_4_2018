@@ -7,7 +7,13 @@ import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { FileSelectDirective } from 'ng2-file-upload';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+
+//FOTO
+import { AngularFireModule } from 'angularfire2';
+import { environment } from '../environments/environment';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+
 
 //Captcha
 import { RecaptchaModule } from 'ng-recaptcha';
@@ -51,6 +57,9 @@ import { AuthService } from './servicios/auth/auth.service';
 import { UsuarioService } from './servicios/usuario.service';
 import { ViajeService } from './servicios/viaje.service';
 import { ChoferService } from './servicios/chofer.service';
+import { EncargadoService } from './servicios/encargado.service';
+import { EncuestaSService } from './servicios/encuesta-s.service';
+import { UploadFileService } from './servicios/upload-file.service';
 
 //PIPES
 import { PrecioPipe } from './pipes/precio.pipe';
@@ -64,6 +73,9 @@ import { EstrellasPipe } from './pipes/estrellas.pipe';
 //DIRECTIVA
 import { PrecioTipoVDirective } from './directivas/precio-tipo-v.directive';
 import { EstadoDirective } from './directivas/estado.directive';
+import { RemiseroComponent } from './componentes/remisero/remisero.component';
+
+
 
 @NgModule({
   declarations: [
@@ -97,7 +109,7 @@ import { EstadoDirective } from './directivas/estado.directive';
     FrmAltaComponent,
     EstrellasPipe,
     CalificacionComponent,
-    FileSelectDirective
+    RemiseroComponent
   ],
   imports: [
     BrowserModule,
@@ -111,16 +123,20 @@ import { EstadoDirective } from './directivas/estado.directive';
     RuteoModule,
     AgmDirectionModule,
     AgmCoreModule.forRoot({
-      apiKey:*****************************
+      //apiKey:*****************************
+      apiKey: 'AIzaSyCin-h5KlbULoPjugwtWhGFo48GlDxD1Fc',
       libraries : ['places']
     }),
     ChartModule,
     TableModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    InputTextareaModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule
   ],
   providers: [MiHttpService,
     AuthGuardService,RoleGuardService,AuthService,UsuarioService,
-    ViajeService, ChoferService],
+    ViajeService, ChoferService, EncargadoService, EncuestaSService, UploadFileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

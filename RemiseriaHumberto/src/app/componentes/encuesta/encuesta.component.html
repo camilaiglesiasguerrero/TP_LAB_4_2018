@@ -1,3 +1,100 @@
-<p>
-  encuesta works!
-</p>
+<app-menu></app-menu>
+
+<div [hidden]="encuestando">
+  <ngb-alert *ngIf="dangerMessage" type="danger" (close)="dangerMessage = null">{{ dangerMessage }}</ngb-alert>
+  
+  <table class="table table-condensed" style="table-layout:fixed"> 
+  <thead>
+    <th style="width: 40%">Pregunta</th>
+    <th style="width: 60%">Respuesta</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1. En líneas generales, ¿cómo calificarías al chofer {{elViaje.chofer}}?</td>
+      <td><ngb-rating style="font-size: 30px; color:gold" [max]=5 [(rate)]='calificacion' ></ngb-rating>   </td>
+    </tr>
+    <tr>
+      <td>2. ¿Se respetaron las condiciones solicitadas?</td>
+      <td>
+        <table>
+          <td>
+           <span style="font-size: 30px; color: green" class="fa fa-check"></span> <br>
+          <input type="radio" name="groupname" value="condicionesSi" [(ngModel)]="selectedValue">  
+        </td>
+        <td>
+            <span style="font-size: 30px; color:red" class="fa fa-times"></span> <br>
+            <input type="radio" name="groupname" value="condicionesNo" [(ngModel)]="selectedValue"> 
+        </td>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td>3. ¿Qué opinás del precio del viaje?</td>
+      <td>
+          <select [(ngModel)]=precio>
+              <option value="bajo">Bajo</option>
+              <option value="ok">Correcto</option>
+              <option value="alto">Alto</option>
+            </select>
+      </td>
+    </tr>
+    <tr>
+        <td>4. ¿Qué te parecieron nuestras unidades? </td>
+        <td>
+            <input type="checkbox" [(ngModel)]=confort> Unidades confortables
+            <input type="checkbox" [(ngModel)]=limpio> Unidades limpias
+            <input type="checkbox" [(ngModel)]=moderno> Unidades modernas  
+        </td>
+    </tr>
+    <tr>
+        <td>5. ¿Qué opinas de los tiempos de espera?</td>
+        <td>
+            <input (change)="tiempoMal()" type="radio" name="grpuptiempo" value="tiempoOk" [(ngModel)]="tiempo">  No tuve problemas, todos los tiempos estuvieron bien
+            <input (change)="tiempoMal()" type="radio" name="grpuptiempo" value="tiempoMal" [(ngModel)]="tiempo">  Tuve problemas.
+            <div *ngIf='flag'>
+              <input type="checkbox" name="grpuptiempo" value="tardoA" [(ngModel)]="tardoA">  El auto tardó en llegar
+              <input type="checkbox" name="grpuptiempo" value="tardoC" [(ngModel)]="tardoC">  El chofer se demoró durante el viaje
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>6. ¿Volverías a elegirnos?</td>
+        <td>
+            <select [(ngModel)]=elegirnos>
+                <option value="Si">Si</option>
+                <option value="No">No</option>
+                <option value="puedeSer">Puede ser</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>7. ¿Te gustó nuestra nueva página web para gestionar tus viajes?</td>
+        <td>
+            <table>
+                <td>
+                 <span style="font-size: 30px;" class="fa fa-thumbs-up"></span> <br>
+                <input type="radio" name="gropage" value="paginaSi" [(ngModel)]="selectedPagina">  
+              </td>
+              <td>
+                  <span style="font-size: 30px; " class="fa fa-thumbs-down"></span> <br>
+                  <input type="radio" name="gropage" value="paginaNo" [(ngModel)]="selectedPagina"> 
+              </td>
+              </table>
+        </td>
+    </tr>
+    <tr>
+        <td>8. Dejanos tus sugerencias</td>
+        <td><textarea pInputTextarea autoResize=true [rows]="4" [cols]="50" [(ngModel)]="sugerencias"></textarea></td>
+    </tr>
+    
+  </tbody>
+</table>
+
+
+<button (click)="TerminarEncuesta()"> Terminar</button>
+
+</div>
+
+<div [hidden]=!encuestando>
+    <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+</div>

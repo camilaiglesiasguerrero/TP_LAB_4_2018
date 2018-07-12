@@ -59,7 +59,7 @@ export class ReservaComponent implements OnInit {
           var aux = data.fecha.split('-');
           this.model = {year: parseInt(aux[0]), month: parseInt(aux[1]), day: parseInt(aux[2])};
           this.dia.setValue({day: this.model.day,month:this.model.month,year:this.model.year} );
-          console.log(this.dia);
+          //console.log(this.dia);
           aux = data.hora.split(':');
           this.time = {hour: aux[0], minute: aux[1]};
           this.hora.setValue(this.time);
@@ -158,7 +158,7 @@ export class ReservaComponent implements OnInit {
 
   Reservar(){
     if(!this.flag)
-      this._danger.next('Por favor complete el captcha');
+      this._danger.next('Por favor completá el captcha');
     else{
       let elViaje: Viaje =  new Viaje();
       elViaje.solicitante = localStorage.getItem("usuario");
@@ -171,6 +171,7 @@ export class ReservaComponent implements OnInit {
       elViaje.lngD = parseFloat(localStorage.getItem("DestinoLng"));
       elViaje.distancia = localStorage.getItem("Distancia");
       elViaje.duracion = localStorage.getItem("Duracion");
+      elViaje.valor = (parseFloat(localStorage.getItem("DistanciaMts")) * 0.02);
       var aux =  this.reservaForm.get('fecha').value;
       var concat = aux.year + '-' + aux.month + '-' + aux.day;  
       elViaje.fecha = concat;
@@ -188,7 +189,7 @@ export class ReservaComponent implements OnInit {
           this.router.navigate(['/Viajes']);
        })
       .catch(e => {
-        this._danger.next("Se ha producido un error, intente nuevamente");
+        this._danger.next("Se ha producido un error, intentá nuevamente");
       });
       }
       else  
@@ -202,7 +203,7 @@ export class ReservaComponent implements OnInit {
           this.router.navigate(['/Viajes']);
         })
         .catch(e => {
-        this._danger.next("Se ha producido un error, intente nuevamente");
+        this._danger.next("Se ha producido un error, intentá nuevamente");
         });
       }
       

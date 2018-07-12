@@ -17,6 +17,7 @@ export class CalificacionComponent implements OnInit {
       this.choferS.TraerTodos()
       .then(data=>{
         this.choferes = data;
+        
       });
     }
 

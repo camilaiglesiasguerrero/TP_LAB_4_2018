@@ -17,6 +17,7 @@ import { DashboardComponent } from '../componentes/dashboard/dashboard.component
 import { ReservaComponent } from '../componentes/reserva/reserva.component';
 import { NexoComponent } from '../componentes/nexo/nexo.component';
 import { FrmAltaComponent } from '../componentes/frm-alta/frm-alta.component';
+import { EncuestaComponent } from '../componentes/encuesta/encuesta.component';
 
 const MiRuteo = [
   
@@ -24,11 +25,12 @@ const MiRuteo = [
   {path:'Principal', component: PrincipalComponent},
   {path: 'Registrarse',component: RegistroComponent},
   {path: 'Ingresar', component: LoginComponent},
-  {path: 'Dashboard',component: DashboardComponent, canActivate: [RoleGuardService],
-      data: { expectedRole: 'encargado' }},
+  {path: 'Dashboard',component: DashboardComponent, canActivate: [RoleGuardService], data: { expectedRole: 'encargado' }},
   {path: 'Viajes', component: NexoComponent, canActivate: [AuthGuardService]},
   {path: 'Reserva', component: ReservaComponent, canActivate: [RoleGuardService], data: { expectedRole: 'cliente' }},
   {path: 'Reserva/:id', component: ReservaComponent, canActivate: [RoleGuardService], data: { expectedRole: 'cliente' }},
+  {path: 'Encuesta', component: EncuestaComponent, canActivate: [RoleGuardService], data: { expectedRole: 'cliente' }},
+  {path: 'Encuesta/:id', component: EncuestaComponent, canActivate: [RoleGuardService], data: { expectedRole: 'cliente' }},
   {path: 'Asignar', component: NexoComponent, canActivate: [RoleGuardService], data: { expectedRole: 'encargado' }},
   {path: 'Autos', component: FrmAltaComponent, canActivate: [RoleGuardService], data: { expectedRole: 'encargado' }},
   {path: 'Remiseros', component: FrmAltaComponent, canActivate: [RoleGuardService], data: { expectedRole: 'encargado' }},

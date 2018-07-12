@@ -3,6 +3,8 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Validators, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { Usuario } from '../../clases/usuario';
+import { Subject, observable } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 function copiaClave(input: FormControl) {
 
@@ -32,6 +34,10 @@ export class RegistroComponent implements OnInit {
   repetidor:any;
   tiempo:number;
   seRegistro:boolean = false;
+
+  private _danger = new Subject<string>();
+  staticAlertClosed = false;
+  dangerMessage: string;
 
   resolved(captchaResponse: string) {
     this.captcha.setValue(captchaResponse);
@@ -70,7 +76,14 @@ export class RegistroComponent implements OnInit {
   });
 
   ngOnInit() {
+    setTimeout(() => this.staticAlertClosed = true, 20000);
+
+    this._danger.subscribe((message) => this.dangerMessage = message);
+    this._danger.pipe(
+      debounceTime(5000)
+    ).subscribe(() => this.dangerMessage = null);
   }
+  
 
   Registrar(){
     this.nuevoUsuario = new Usuario();
@@ -95,7 +108,9 @@ export class RegistroComponent implements OnInit {
   this.seRegistro = false;
   this.usuarioS.CrearUsuario(this.nuevoUsuario)
     .then(data => {
-      var respuesta =  this.usuarioS.GenerarToken(this.nuevoUsuario.email,this.nuevoUsuario.clave,this.nuevoUsuario.tipo, token => { 
+      if( data != "ya existe")
+      {
+        var respuesta =  this.usuarioS.GenerarToken(this.nuevoUsuario.email,this.nuevoUsuario.clave,this.nuevoUsuario.tipo, token => { 
         if(token!=undefined)
         {
           localStorage.setItem("token",token);
@@ -105,6 +120,9 @@ export class RegistroComponent implements OnInit {
             this.router.navigate(['/Reserva']);
         }
       });
+    }
+    else 
+      this._danger.next("El usuario ya existe. Verifique.");
     }).catch(e => {
       console.log(e);
     });   

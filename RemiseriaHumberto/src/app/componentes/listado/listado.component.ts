@@ -11,6 +11,7 @@ import { Auto } from '../../clases/auto';
 import * as jspdf from 'jspdf';  
 import html2canvas from 'html2canvas'; 
 import { EncargadoService } from '../../servicios/encargado.service';
+import { storage } from 'firebase';
 
 @Component({
   selector: 'app-listado',
@@ -96,7 +97,6 @@ export class ListadoComponent implements OnInit {
       debounceTime(5000)
     ).subscribe(() => this.dangerMessage = null);
 
-    var aux : Array<any>;
     this.remiseros = new Array<any>();
     if(this.esEncargado){
       this.choferS.TraerTodos()
@@ -407,7 +407,7 @@ export class ListadoComponent implements OnInit {
     }
 
     public Exportar()  
-  {  
+    {  
     var data = document.getElementById('contentToConvert');  
     html2canvas(data).then(canvas => {  
       // Few necessary setting options  
@@ -424,7 +424,27 @@ export class ListadoComponent implements OnInit {
     });  
   }  
 
+  Encuesta(id : number){
+    this.router.navigate(['/Encuesta', { id: id} ]);
   }
 
-  
+  aux : Array<any>;
+  elChofer : Remisero;
 
+  VerChofer(chofer : string){
+    this.aux = new Array<any>();
+    this.elChofer = new Remisero();
+    let concat;
+
+    this.choferS.TraerTodos()
+    .then(data =>{
+      this.aux = data;
+      for (let index = 0; index < this.aux.length; index++) {
+        concat = this.aux[index].nombre + ' ' + this.aux[index].apellido;
+        if(concat == chofer){
+          this.elChofer = this.aux[index];
+        }    
+      }
+    });
+  }
+}

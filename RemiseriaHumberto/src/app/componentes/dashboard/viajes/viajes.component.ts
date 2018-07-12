@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ViajeService } from '../../../servicios/viaje.service';
 import { ChoferService } from '../../../servicios/chofer.service';
 
+
 @Component({
   selector: 'app-viajes',
   templateUrl: './viajes.component.html',
@@ -13,10 +14,11 @@ export class ViajesComponent implements OnInit {
   remiseros: Array<any>;
   labels : Array<any>;
   qty : Array<any>;
-
+  
     constructor(private viajeS : ViajeService, private choferS : ChoferService) {
       var aux : Array<any>;
       this.remiseros = new Array<any>();
+      
       this.labels = new Array<any>();
       this.qty = new Array<any>();
       var concat : string;
@@ -63,6 +65,8 @@ export class ViajesComponent implements OnInit {
       }).catch(e=>{
 
       });
+
+      
     }
 
   ngOnInit() {

@@ -10,11 +10,13 @@ import 'rxjs/add/operator/finally';
 import { error } from 'protractor';
 import { throwError } from 'rxjs';
 import { errorHandler } from '@angular/platform-browser/src/browser';
+import { Encuesta } from '../clases/encuesta';
 
 @Injectable()
 export class MiHttpService {
 
-  url : string = "http://localhost:8080/fApi/api";
+  //url : string = "http://localhost:8080/fApi/api";
+  url : string = "https://remiseriahumberto.000webhostapp.com/fApi/api/index.php";
   headers: Headers;
   options: RequestOptions;
 
@@ -35,7 +37,7 @@ export class MiHttpService {
       .pipe(map(res => res))
       .subscribe(callback, 
         error => {
-          alert(error._body);
+          //alert(error._body);
            this.manejadorDeError(error);
         });
   }
@@ -45,12 +47,23 @@ export class MiHttpService {
       data.append('tipo', usuario.tipo);
       data.append('email', usuario.email);
       data.append('clave', usuario.clave);
-      
+    
       return this.http
-        .post(this.url + '/Usuario/', data)
-          .toPromise()
-          .then(this.extraerDatos)
-          .catch(this.manejadorDeError);
+        .get(this.url + '/Usuario/' +usuario.email)
+        .toPromise()
+        .then(rta => {
+         if(rta.status == 200){// console.log(rta);
+          return this.http
+            .post(this.url + '/Usuario/', data)
+              .toPromise()
+              .then(this.extraerDatos)
+              .catch(this.manejadorDeError);
+          }else 
+            return "ya existe";
+        })
+        .catch( this.manejadorDeError );
+      
+      
     }
 
     traerLugar(url:string)
@@ -79,7 +92,7 @@ export class MiHttpService {
       data.append('Obs',viaje.obs);
       data.append('duracion',viaje.duracion);
       data.append('distancia',viaje.distancia);
-      //data.append('valor',viaje.valor.toString());
+      viaje.valor.toString() != null && viaje.valor.toString() != undefined && viaje.valor.toString() != '' ? data.append('valor',viaje.valor.toString()) : 1;
       data.append('estado',viaje.estado);
       //console.log(data);
 
@@ -234,8 +247,10 @@ export class MiHttpService {
       data.append('email',remisero.email);
       data.append('telefono',remisero.telefono.toString());
       data.append('estado',remisero.estado);
-      data.append('foto',remisero.pathFoto,remisero.pathFoto.name);
-      console.log(data.get('nombre'));
+      data.append('foto',remisero.pathFoto);
+      var aux = remisero.nombre + ' ' + remisero.apellido;
+      data.append('na',aux)
+      //console.log(data.get('nombre'));
       return this.http
         .post(this.url + '/Remisero/', data)
         .toPromise()
@@ -263,10 +278,11 @@ export class MiHttpService {
       let data = new URLSearchParams();
       remisero.nombre != undefined ? data.append('nombre',remisero.nombre) : 1;
       remisero.apellido != undefined ? data.append('apellido',remisero.apellido) : 1;
-      remisero.telefono != undefined ? data.append('telefono',remisero.telefono.toString()) : 1;
-      //remisero.email != undefined ? data.append('email',remisero.email) : 1;
+      let concat = remisero.nombre + ' ' + remisero.apellido;
+      remisero.nombre != undefined && remisero.apellido != undefined ? data.append('na',concat) : 1;
+      remisero.telefono != undefined ? data.append('telefono',remisero.telefono.toString()) : 1;      
       remisero.calificacion != undefined ? data.append('calificacion',remisero.calificacion.toString()) : 1;
-
+      
       data.append('estado',remisero.estado);
       data.append('id',remisero.id.toString());
       //console.log(data);
@@ -297,7 +313,47 @@ export class MiHttpService {
         .catch( this.manejadorDeError );
     }
 
-    
+    CrearEncuesta(encuesta: Encuesta){ 
+      let data = new URLSearchParams();
+      data.append('idViaje',encuesta.idViaje.toString());
+      
+      
+      let auxCalif:number;
+      this.TraerChoferes()
+      .then(dato => {
+        for (let index = 0; index < dato.length; index++) {
+          if(dato[index].na == encuesta.chofer){
+            auxCalif = dato[index].calificacion;
+            auxCalif += encuesta.calificacion;
+            auxCalif = auxCalif/2;
+            //console.log("calif: " + auxCalif + "idchofer: "+ dato[index].id);
+            data.append('chofer',dato[index].id);
+            data.append('calificacion',auxCalif.toString());
+          }
+        }
+      });
+      
+
+      data.append('condiciones',encuesta.selectedValue);
+      data.append('precio',encuesta.precio);
+      encuesta.confort != null ? data.append('confort',encuesta.confort.toString()) : 1;
+      encuesta.limpio != null ?  data.append('limpio',encuesta.limpio.toString()) : 1;
+      encuesta.moderno != null ? data.append('moderno',encuesta.moderno.toString()) : 1;
+      data.append('tiempo',encuesta.tiempo);
+      encuesta.tardoA != null ? data.append('tardoA',encuesta.tardoA.toString()) : 1;
+      encuesta.tardoC != null ? data.append('tardoC',encuesta.tardoC.toString()) : 1;
+      data.append('elegirnos',encuesta.elegirnos);
+      data.append('pagina',encuesta.selectedPagina);
+      encuesta.sugerencias != null ? data.append('sugerencias',encuesta.sugerencias) : 1;
+      
+      return this.http
+        .post(this.url + '/Encuesta/', data)
+        .toPromise()
+        .then( this.extraerDatos )
+        .catch( this.manejadorDeError );
+    }
+
+
     manejadorDeError(error:Response|any)
     { 
       return error;

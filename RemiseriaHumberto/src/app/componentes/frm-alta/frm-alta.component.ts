@@ -7,7 +7,11 @@ import { ChoferService } from '../../servicios/chofer.service';
 import { Remisero } from '../../clases/remisero';
 import { Auto } from '../../clases/auto';
 import { EncargadoService } from '../../servicios/encargado.service';
-
+import { AngularFireStorage } from 'angularfire2/storage';
+import { Observable } from "rxjs";
+import { map } from 'rxjs/operators';
+import { UploadFileService } from '../../servicios/upload-file.service';
+import { Upload } from '../../clases/upload';
 
 @Component({
   selector: 'app-frm-alta',
@@ -38,8 +42,13 @@ export class FrmAltaComponent implements OnInit {
   categoria: string;
   patente: string;
 
+  selectedFiles: FileList;
+  currentFileUpload: Upload;
+  progress: { percentage: number } = { percentage: 0 };
+
   constructor(private route: ActivatedRoute, private router: Router, 
-    private autoS : AutoService, private remiseroS : ChoferService, private encargadoS : EncargadoService) { }
+    private autoS : AutoService, private remiseroS : ChoferService, private encargadoS : EncargadoService,
+    private uploadService: UploadFileService) { }
 
   ngOnInit() {
     this.agregar = false;
@@ -92,7 +101,6 @@ export class FrmAltaComponent implements OnInit {
     this._success.pipe(
       debounceTime(5000)
     ).subscribe(() => this.successMessage = null);
-
   }
 
   Agregar(){
@@ -110,10 +118,11 @@ export class FrmAltaComponent implements OnInit {
         remisero.email = this.email;
         remisero.telefono = this.telefono;
         remisero.estado = "Activo";
-        remisero.pathFoto = this.selectedFile;
+        remisero.pathFoto = localStorage.getItem('foto');
+        localStorage.removeItem('foto');
         this.remiseroS.CrearUno(remisero)
         .then(data =>{
-          console.log(data);
+          //console.log(data);
           this.listado.push(remisero);
           this._success.next("Se creó el usuario para " + this.nombre + ' ' + this.apellido + '. Debe ingresar con su email, la clave es 123456, para cambiarla debe dirigirse a Mi Perfil');
         })
@@ -152,6 +161,7 @@ export class FrmAltaComponent implements OnInit {
         encargado.email = this.email;
         encargado.telefono = this.telefono;
         encargado.estado = "Activo";
+        
         this.encargadoS.CrearUno(encargado)
         .then(data =>{
           console.log(data);
@@ -167,10 +177,20 @@ export class FrmAltaComponent implements OnInit {
     }
   }
 
-  selectedFile : File = null;
 
-  onFileSelected(event){
-    this.selectedFile = <File>event.target.files[0];
+  selectFile(event) {
+    this.selectedFiles = event.target.files;
+  }
+ 
+  upload() {
+    const file = this.selectedFiles.item(0);
+    this.selectedFiles = undefined;
+ 
+    this.currentFileUpload = new Upload(file);
+    this.uploadService.pushFileToStorage(this.currentFileUpload, this.progress);
   }
 
+  deleteFileUpload(fileUpload) {
+    this.uploadService.deleteFileUpload(fileUpload);
+  }
 }

@@ -1,0 +1,14 @@
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="container" >
+    <div class="card">
+      <h2>{{elChofer.chofer}}</h2>
+      
+      <img class="img-thumbnail" [src]='elChofer.pathFoto' alt="Avatar" style="width:100%">
+      
+        
+    </div>
+  </div>
+</ng-template>
+
+<!--<button class="btn btn-lg btn-outline-primary" >Launch demo modal</button>-->
+<button type="button" [disabled]='elChofer.chofer === ""' class="btn btn-default miBtn" (click)="open(content)" popover="Ver datos del chofer" triggers="mouseenter:mouseleave" ><span  class="fa fa-eye"></span></button>

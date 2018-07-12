@@ -1,5 +1,6 @@
 <app-menu></app-menu>
-
+<button (click)="Exportar()">Exportar</button>
+<div id=contentToConvert>
 <table class="table table-condensed" style="table-layout:fixed" > 
     <thead>
 <!--        <tr>
@@ -10,12 +11,13 @@
       <tbody>
             <tr> 
                 <td> <strong> VIAJES POR TIPO DE SERVICIO</strong> <br> <app-tipo-serv></app-tipo-serv></td>        
-                <td> <strong>CANTIDAD DE VIAJES POR CHOFER</strong> <br> <app-viajes></app-viajes> </td>        
+                <td> <strong>CALIFICACIONES DE CHOFERES</strong> <br> <app-calificacion></app-calificacion> </td>        
             </tr>  
-            <tr> 
-                <td> <strong>TOP 5 DE CHOFERES MEJORES CALIFICADOS</strong> <br> <app-calificacion></app-calificacion></td>        
-                <td> <app-viajes></app-viajes> </td>        
-            </tr> 
       </tbody> 
     </table>
-    <app-tabla></app-tabla>
+    <div style="text-align: center; width: 67%">
+    <strong>CANTIDAD DE VIAJES POR CHOFER</strong> <br> 
+    
+        <app-viajes></app-viajes>
+    </div>
+</div>

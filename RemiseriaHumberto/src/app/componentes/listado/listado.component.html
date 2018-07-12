@@ -1,5 +1,6 @@
 <ngb-alert *ngIf="dangerMessage" type="danger" (close)="dangerMessage = null">{{ dangerMessage }}</ngb-alert>
-<!--<button (click)="Exportar()">Exportar</button>-->
+
+<button [hidden]='!sonViajes || asignar' (click)="Exportar()">Exportar</button>
 
 <!--TABLA DE VIAJES GENERAL-->
 <table class="table table-condensed" id=contentToConvert style="table-layout:fixed" [hidden]='!sonViajes || asignar'> 
@@ -40,21 +41,22 @@
                         <option value="ctacte">Cuenta Corriente</option>
                     </select>
             </td>
-            <td>{{item.chofer}}</td>
+            <td>{{item.chofer}} <br> <img [hidden]=!esCliente [src]=item.pathFoto alt="" style="border-radius: 50%; width: 50%"></td>
             <td>{{item.auto}}</td>
             <td >{{item.estado}}</td>
             <td [hidden]=!esCliente>
                 <div *ngIf='item.deshabilitado' >
                     <button disabled type="button" class="btn btn-warning miBtn" popover="Editar viaje" triggers="mouseenter:mouseleave" ><span class="fa fa-pencil"></span></button>
                     <button disabled type="button" class="btn btn-danger miBtn" popover="Cancelar viaje" triggers="mouseenter:mouseleave" ><span class="fa fa-ban"></span></button>
-                    <button type="button" class="btn btn-success miBtn" popover="Responder encuesta" triggers="mouseenter:mouseleave" (click)='Encuesta(item.id)' ><span  class="fa fa-check-circle"></span></button>
-                    <button type="button" class="btn btn-default miBtn" popover="Ver ruta" triggers="mouseenter:mouseleave" (click)='VerMapa(item.id)' ><span  class="fa fa-eye"></span></button>
+                    <button type="button" class="btn btn-success miBtn" popover="Responder encuesta" triggers="mouseenter:mouseleave" (click)="Encuesta(item.id)" ><span  class="fa fa-check-circle"></span></button>
+                    <app-remisero [elChofer]="item"></app-remisero>
                 </div>
                 <div *ngIf='!item.deshabilitado' >
                     <button type="button" class="btn btn-warning miBtn" popover="Editar viaje" triggers="mouseenter:mouseleave" (click)="Editar(item.id)" ><span  class="fa fa-pencil"></span></button>
                     <button type="button" class="btn btn-danger miBtn" popover="Cancelar viaje" triggers="mouseenter:mouseleave" (click)="Cancelar(item.id)" ><span  class="fa fa-ban"></span></button>
                     <button disabled type="button" class="btn btn-success miBtn" popover="Responder encuesta" triggers="mouseenter:mouseleave" ><span class="fa fa-check-circle"></span></button>
-                    <button type="button" class="btn btn-default miBtn" popover="Ver ruta" triggers="mouseenter:mouseleave" (click)='VerMapa(item.id)' ><span  class="fa fa-eye"></span></button>
+                    <!--<button type="button" class="btn btn-default miBtn" popover="Ver datos del chofer" triggers="mouseenter:mouseleave" (click)='VerChofer(item.chofer)' ><span  class="fa fa-eye"></span></button>-->
+                    <app-remisero [elChofer]="item"></app-remisero>
                 </div>
             </td>
             <td [hidden]=!esRemisero>
@@ -73,7 +75,7 @@
 
 
 <!--TABLA DE VIAJES PARA ASIGNAR-->
-<table id=contentToConvert class="table table-condensed" style="table-layout:fixed" [hidden]='!sonViajes || !asignar'> 
+<table class="table table-condensed" style="table-layout:fixed" [hidden]='!sonViajes || !asignar'> 
         <thead>
             <tr>
                 <th hidden>id</th>
@@ -127,6 +129,7 @@
             <th>Calificación</th>
             <th>Email</th>
             <th>Teléfono</th>
+            <th>Foto</th>
             <th>Estado</th>
             <th></th>
         </tr>
@@ -142,6 +145,7 @@
                 <td >{{item.email}}</td>
                 <td *ngIf='!habilitaEdicion || (item.id !== elId)'>{{item.telefono}}</td>
                 <td *ngIf='habilitaEdicion  && (item.id === elId)'><input type="number" [(ngModel)]=telefono [value]='telefono'></td>        
+                <th > <img [src]=item.pathFoto alt="" style="border-radius: 50%; width: 50%"> </th>
                 <td>{{item.estado}}</td>
                 <td>
                     <button *ngIf='!habilitaEdicion || (item.id !== elId)' type="button" class="btn btn-warning miBtn" popover="Editar chofer" triggers="mouseenter:mouseleave" (click)="EditFrm(item)" ><span  class="fa fa-pencil"></span></button>
@@ -227,3 +231,5 @@
             </tr>  
       </tbody> 
     </table>
+
+

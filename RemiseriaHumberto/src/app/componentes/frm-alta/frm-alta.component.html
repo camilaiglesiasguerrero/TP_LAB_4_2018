@@ -21,8 +21,24 @@
       <br>
       <br>
       <input type="number" placeholder="Teléfono" name="telefono" [(ngModel)]="telefono" required>
-
-      <input type="file" (change)="onFileSelected($event)">
+      <br>
+  <!--FOTO-->
+      <div *ngIf="currentFileUpload" class="progress">
+        <div style="text-align: center; width: 20%;" class="progress-bar progress-bar-info progress-bar-striped"
+          role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
+          aria-valuemin="0" aria-valuemax="100"
+          [ngStyle]="{width:progress.percentage+'%'}">
+          {{progress.percentage}}%</div>
+      </div>
+       
+      <label class="btn btn-default"> <input type="file"
+        (change)="selectFile($event)">
+      </label>
+       
+      <button class="btn btn-success" [disabled]="!selectedFiles"
+        (click)="upload()">Subir</button>
+  
+<!--FIN FOTO-->
 
       <div style="margin-top: 3%">
         <button type="submit" class="btn btn-success" (click)="Guardar()" >Guardar</button>

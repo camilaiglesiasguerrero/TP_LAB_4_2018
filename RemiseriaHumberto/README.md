@@ -48,5 +48,5 @@ El sistema permite al usuario interactuar con facilidad, desde el simple pedido 
 ![Graficos](https://github.com/camilaiglesiasguerrero/TP_LAB_4_2018/blob/master/RemiseriaHumberto/src/assets/Imagenes/Readme/graficos.jpg)
 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+
 

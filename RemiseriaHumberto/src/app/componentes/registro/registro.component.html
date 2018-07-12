@@ -1,5 +1,5 @@
 <app-menu></app-menu>
-
+<ngb-alert *ngIf="dangerMessage" type="danger" (close)="dangerMessage = null">{{ dangerMessage }}</ngb-alert>
 <div class="container" style="text-align:center; margin-top:3%">
     <form>
       <strong>REGISTRARSE</strong>

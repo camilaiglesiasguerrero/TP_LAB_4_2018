@@ -13,7 +13,7 @@ export class PrecioPipe implements PipeTransform {
       return "$ " + value.toFixed(2) + '.-';
     }
     else 
-      return "El precio aproximado es $ " + (value * 0.02).toFixed(2) + '.-';
+      return "El precio es $ " + (value * 0.02).toFixed(2) + '.-';
   }
 
 }
