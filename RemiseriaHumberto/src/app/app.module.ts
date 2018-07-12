@@ -124,7 +124,7 @@ import { RemiseroComponent } from './componentes/remisero/remisero.component';
     AgmDirectionModule,
     AgmCoreModule.forRoot({
       //apiKey:*****************************
-      apiKey: 'AIzaSyCin-h5KlbULoPjugwtWhGFo48GlDxD1Fc',
+      
       libraries : ['places']
     }),
     ChartModule,
