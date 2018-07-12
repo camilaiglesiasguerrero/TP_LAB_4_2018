@@ -206,9 +206,9 @@ export class MapaComponent implements OnInit {
 
   conDirec(){
     this.provideRouteAlternatives = true;
-    //bloqueada 30-06 
-    var key = "&key=AIzaSyCin-h5KlbULoPjugwtWhGFo48GlDxD1Fc";
-    //var key = "&key=AIzaSyBmFOMZzSLViDvP44lp-yD9kwa-G_IuCdM";
+
+    var key = "&key=*******************";
+   
     
     var url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
     
